@@ -31,4 +31,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select count (u.id) from User u where u.isDelete=false  and u.active=true")
     long countByUsers();
 
+    Optional<User> findByGmail(String email);
+
 }

@@ -46,11 +46,6 @@ public class UserController {
         return this.postService.deletePostByUser(user_id, post_id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DataResponse<Void> createUser(@Valid @RequestBody UserDtaoIn userDtaoIn) {
-        return this.userService.createUser(userDtaoIn);
-    }
-
     @PutMapping(path = "/{user_id}")
     public DataResponse<Void> updateUser(@PathVariable Long user_d, @Valid @RequestBody UserDtaoIn userDtaoIn) {
         return this.userService.updateUser(user_d, userDtaoIn);

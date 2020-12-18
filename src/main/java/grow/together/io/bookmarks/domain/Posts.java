@@ -22,6 +22,12 @@ public class Posts extends AuditableModel  {
 
     private String title;
 
+    private  String author;
+
+    private String imageLink;
+
+    private String readTime;
+
     @Column(name ="nbre_like")
     private int like;
 

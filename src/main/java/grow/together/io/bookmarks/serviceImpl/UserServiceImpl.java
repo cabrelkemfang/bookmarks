@@ -17,8 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2RefreshToken;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,12 +32,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PostRepository postRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenStore tokenStore;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PostRepository postRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PostRepository postRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.postRepository = postRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.tokenStore = tokenStore;
     }
 
 
@@ -44,7 +53,7 @@ public class UserServiceImpl implements UserService {
         user.setGmail(userDtaoIn.getGmail());
         user.setName(userDtaoIn.getName());
         //Password will be encoded later
-        user.setPassword(userDtaoIn.getPassword());
+        user.setPassword(passwordEncoder.encode(userDtaoIn.getPassword()));
         Role role = this.roleRepository.findByName(userDtaoIn.getRole())
                 .orElseThrow(() -> new ResourceNotFoundException("Role Not Found with Role Name: " + userDtaoIn.getRole()));
         user.setRole(role);
@@ -108,6 +117,22 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(userMapper(user, userDtaoIn, roleRepository));
 
         return new DataResponse<>("User Updated Successfully", HttpStatus.OK.value());
+    }
+
+    @Override
+    public DataResponse<Void> logout(HttpServletRequest request) {
+
+        String authorization = request.getHeader("Authorization");
+        if (authorization != null && authorization.contains("Bearer")) {
+            String tokenValue = authorization.replace("Bearer", "").trim();
+
+            OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
+            tokenStore.removeAccessToken(accessToken);
+
+            OAuth2RefreshToken refreshToken = accessToken.getRefreshToken();
+            tokenStore.removeRefreshToken(refreshToken);
+        }
+        return new DataResponse<>("Logout Successfully", HttpStatus.NO_CONTENT.value());
     }
 
 

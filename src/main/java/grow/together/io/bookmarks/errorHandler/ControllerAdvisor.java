@@ -45,6 +45,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+
+    @ExceptionHandler(CustomOauthException.class)
+    public ResponseEntity<?> oauthException(CustomOauthException badRequestException,
+                                            HttpServletRequest httpServletRequest) {
+        ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
+        errorDetails.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorDetails.setMessage(badRequestException.getMessage());
+        errorDetails.setTitle("Un Authorize");
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(ResourceExist.class)
     public ResponseEntity<?> handleResourceExistException(ResourceExist resourceExist,
                                                           HttpServletRequest httpServletRequest) {
