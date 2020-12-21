@@ -1,5 +1,6 @@
 package grow.together.io.bookmarks.service;
 
+import grow.together.io.bookmarks.domain.User;
 import grow.together.io.bookmarks.dtoModel.DataResponse;
 import grow.together.io.bookmarks.dtoModel.PageableResult;
 import grow.together.io.bookmarks.dtoModel.UserDtaoIn;
@@ -14,7 +15,7 @@ public interface UserService {
 
     DataResponse<UserDtaoOut> getUserById(Long user_id);
 
-    DataResponse<Void> updateUserStatus(Long user_id , boolean status);
+    DataResponse<Void> updateUserStatus(Long user_id, boolean status);
 
     DataResponse<Void> updateUser(Long user_id, UserDtaoIn userDtaoIn);
 

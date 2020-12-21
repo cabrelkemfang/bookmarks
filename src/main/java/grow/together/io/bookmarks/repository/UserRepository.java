@@ -4,6 +4,7 @@ import grow.together.io.bookmarks.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -33,4 +34,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByGmail(String email);
 
+    @Query("UPDATE User u SET u.failedAttempt = :failAttempts WHERE u.gmail = :email")
+    @Modifying
+    public void updateFailedAttempts(@Param("failAttempts") int failAttempts, @Param("email") String email);
 }

@@ -2,7 +2,7 @@ package grow.together.io.bookmarks.config;
 
 import grow.together.io.bookmarks.errorHandler.CustomAccessDeniedHandler;
 import grow.together.io.bookmarks.errorHandler.CustomAuthenticationEntryPoint;
-import grow.together.io.bookmarks.serviceImpl.CustomeUserService;
+import grow.together.io.bookmarks.serviceImpl.CustomerUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -24,12 +23,12 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private final CustomeUserService userDetailsService;
+    private final CustomerUserService userDetailsService;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
 
     @Autowired
-    public ServerSecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomeUserService userDetailsService, CustomAccessDeniedHandler customAccessDeniedHandler) {
+    public ServerSecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomerUserService userDetailsService, CustomAccessDeniedHandler customAccessDeniedHandler) {
         this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
         this.userDetailsService = userDetailsService;
         this.customAccessDeniedHandler = customAccessDeniedHandler;

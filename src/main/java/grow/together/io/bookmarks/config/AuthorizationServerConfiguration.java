@@ -1,15 +1,12 @@
 package grow.together.io.bookmarks.config;
 
-import grow.together.io.bookmarks.errorHandler.CustomOauthException;
-import grow.together.io.bookmarks.serviceImpl.CustomeUserService;
+import grow.together.io.bookmarks.serviceImpl.CustomerUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -26,7 +23,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final CustomeUserService userService;
+    private final CustomerUserService userService;
     private final ResponseExceptionTranslator responseExceptionTranslator;
 
     @Value("${spring.aouth.client_id}")
@@ -45,7 +42,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private String resourceIds;
 
     @Autowired
-    public AuthorizationServerConfiguration(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, CustomeUserService userService, ResponseExceptionTranslator responseExceptionTranslator) {
+    public AuthorizationServerConfiguration(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, CustomerUserService userService, ResponseExceptionTranslator responseExceptionTranslator) {
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;

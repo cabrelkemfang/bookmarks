@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -30,6 +31,15 @@ public class User extends AuditableModel {
     private boolean active = false;
 
     private boolean isDelete = false;
+
+    @Column(name = "account_non_locked")
+    private boolean accountNonLocked;
+
+    @Column(name = "failed_attempt")
+    private int failedAttempt;
+
+    @Column(name = "lock_time")
+    private Date lockTime;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
