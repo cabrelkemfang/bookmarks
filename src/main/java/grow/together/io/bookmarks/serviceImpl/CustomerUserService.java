@@ -39,7 +39,7 @@ public class CustomerUserService implements UserDetailsService {
 
         if (!userInfo.isPresent()) {
             throw new UsernameNotFoundException("UserName or password Not Correct");
-        } else if (userInfo.get().isAccountNonLocked()) {
+        } else if (!userInfo.get().isAccountNonLocked()) {
             throw new UsernameNotFoundException("Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours.");
         } else if (!userInfo.get().isActive()) {
             throw new UsernameNotFoundException("You Account Have Not yet been Activated Please Contact The Admin");

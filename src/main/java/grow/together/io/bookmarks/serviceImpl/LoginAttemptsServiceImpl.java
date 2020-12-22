@@ -42,6 +42,9 @@ public class LoginAttemptsServiceImpl implements LoginAttempsService {
 
     @Override
     public void unlockWhenTimeExpired(User user) {
-
+       user.setLockTime(null);
+       user.setFailedAttempt(0);
+       user.setAccountNonLocked(true);
+       this.userRepository.save(user);
     }
 }

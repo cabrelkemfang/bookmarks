@@ -35,13 +35,13 @@ public class AuthenticationFailledEventListener {
 
         User user = this.userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("UserName or password Not Correct"));
 
-//        // update the failed login count for the user
-//        if (user.getFailedAttempt() >= maxFailledAttempts) {
-//            this.loginAttempsService.lock(user);
-//            throw new UsernameNotFoundException("Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours.");
-//        } else {
-//            this.loginAttempsService.increaseFailedAttempts(user);
-//        }
+        // update the failed login count for the user
+        if (user.getFailedAttempt() >= maxFailledAttempts) {
+            this.loginAttempsService.lock(user);
+            throw new UsernameNotFoundException("Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours.");
+        } else {
+            this.loginAttempsService.increaseFailedAttempts(user);
+        }
     }
 
 
