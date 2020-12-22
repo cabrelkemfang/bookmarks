@@ -38,13 +38,13 @@ public class CustomerUserService implements UserDetailsService {
         Optional<User> userInfo = this.userRepository.findByEmail(s);
 
         if (!userInfo.isPresent()) {
-            throw new ResourceNotFoundException("UserName or password Not Correct");
+            throw new UsernameNotFoundException("UserName or password Not Correct");
         } else if (userInfo.get().isAccountNonLocked()) {
-
-        } else if (userInfo.get().isActive()) {
-
+            throw new UsernameNotFoundException("Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours.");
+        } else if (!userInfo.get().isActive()) {
+            throw new UsernameNotFoundException("You Account Have Not yet been Activated Please Contact The Admin");
         } else if (userInfo.get().isDelete()) {
-
+            throw new UsernameNotFoundException("UserName is Not Longer Part Of The System The account Have Been Delete");
         }
         return new org.springframework.security.core.userdetails.User(
                 userInfo.get().getGmail(), userInfo.get().getPassword(), userInfo.get().isActive(), true, true,

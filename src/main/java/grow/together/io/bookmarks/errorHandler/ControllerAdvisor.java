@@ -57,6 +57,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<?> UsernameNotFoundExceptionException(UsernameNotFoundException badRequestException,
+                                            HttpServletRequest httpServletRequest) {
+        ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
+        errorDetails.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorDetails.setMessage(badRequestException.getMessage());
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(ResourceExist.class)
     public ResponseEntity<?> handleResourceExistException(ResourceExist resourceExist,
                                                           HttpServletRequest httpServletRequest) {

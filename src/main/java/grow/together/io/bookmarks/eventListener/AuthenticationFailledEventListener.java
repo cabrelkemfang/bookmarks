@@ -2,6 +2,7 @@ package grow.together.io.bookmarks.eventListener;
 
 import grow.together.io.bookmarks.domain.User;
 import grow.together.io.bookmarks.errorHandler.ResourceNotFoundException;
+import grow.together.io.bookmarks.errorHandler.UsernameNotFoundException;
 import grow.together.io.bookmarks.repository.UserRepository;
 import grow.together.io.bookmarks.service.LoginAttempsService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class AuthenticationEventListener {
+public class AuthenticationFailledEventListener {
 
     private final UserRepository userRepository;
     private final LoginAttempsService loginAttempsService;
@@ -22,24 +23,27 @@ public class AuthenticationEventListener {
     private int maxFailledAttempts;
 
     @Autowired
-    public AuthenticationEventListener(UserRepository userRepository, LoginAttempsService loginAttempsService) {
+    public AuthenticationFailledEventListener(UserRepository userRepository, LoginAttempsService loginAttempsService) {
         this.userRepository = userRepository;
         this.loginAttempsService = loginAttempsService;
     }
 
     @EventListener
-    public void authenticationFailed(AuthenticationFailureBadCredentialsEvent event) {
+    public void authenticationFailed(AuthenticationFailureBadCredentialsEvent event) throws UsernameNotFoundException {
 
         String email = (String) event.getAuthentication().getPrincipal();
 
-        User user = this.userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(""));
+        User user = this.userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("UserName or password Not Correct"));
 
-        // update the failed login count for the user
-        if (user.getFailedAttempt() >= maxFailledAttempts) {
-
-        } else {
-            this.loginAttempsService.increaseFailedAttempts(user);
-        }
+//        // update the failed login count for the user
+//        if (user.getFailedAttempt() >= maxFailledAttempts) {
+//            this.loginAttempsService.lock(user);
+//            throw new UsernameNotFoundException("Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours.");
+//        } else {
+//            this.loginAttempsService.increaseFailedAttempts(user);
+//        }
     }
+
+
 
 }
