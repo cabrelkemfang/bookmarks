@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.config;
 
-import grow.together.io.bookmarks.serviceImpl.CustomerUserService;
+import grow.together.io.bookmarks.serviceimpl.CustomerUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

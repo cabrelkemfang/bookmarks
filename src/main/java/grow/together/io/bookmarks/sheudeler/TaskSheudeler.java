@@ -38,7 +38,7 @@ public class TaskSheudeler {
 //    @Scheduled(cron = "${cron-jop}")
     public void unlockUser() {
         this.userRepository.getLockUser(failledTime,maxFailledAttempt).stream()
-                .map(user ->  this.loginAttempsService.unlockWhenTimeExpired(user))
+                .map(this.loginAttempsService::unlockWhenTimeExpired)
                 .collect(Collectors.toList());
         log.info("Account unlock");
     }

@@ -1,9 +1,9 @@
 package grow.together.io.bookmarks.service;
 
-import grow.together.io.bookmarks.dtoModel.DataResponse;
-import grow.together.io.bookmarks.dtoModel.PageableResult;
-import grow.together.io.bookmarks.dtoModel.PostDtoIn;
-import grow.together.io.bookmarks.dtoModel.PostDtoOut;
+import grow.together.io.bookmarks.dtomodel.DataResponse;
+import grow.together.io.bookmarks.dtomodel.PageableResult;
+import grow.together.io.bookmarks.dtomodel.PostDtoIn;
+import grow.together.io.bookmarks.dtomodel.PostDtoOut;
 
 public interface PostService {
     DataResponse<PostDtoOut> getPostById(Long post_id);

@@ -1,7 +1,7 @@
 package grow.together.io.bookmarks.service;
 
 
-import grow.together.io.bookmarks.dtoModel.*;
+import grow.together.io.bookmarks.dtomodel.*;
 
 public interface SubscriberService {
     DataResponse<Void> subscribe(SubcriberDtoIn subcriberDtoIn);

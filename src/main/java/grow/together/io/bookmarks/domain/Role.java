@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.domain;
 
-import grow.together.io.bookmarks.dtoModel.AuditableModel;
+import grow.together.io.bookmarks.dtomodel.AuditableModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

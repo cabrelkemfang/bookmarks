@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.validator.annotation;
 
-import grow.together.io.bookmarks.dtoModel.UserDtaoIn;
+import grow.together.io.bookmarks.dtomodel.UserDtaoIn;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

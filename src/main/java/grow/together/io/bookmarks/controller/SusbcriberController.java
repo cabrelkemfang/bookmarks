@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.controller;
 
-import grow.together.io.bookmarks.dtoModel.*;
+import grow.together.io.bookmarks.dtomodel.*;
 import grow.together.io.bookmarks.service.SubscriberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

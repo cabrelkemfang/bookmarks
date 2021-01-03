@@ -1,10 +1,10 @@
 package grow.together.io.bookmarks.service;
 
 import grow.together.io.bookmarks.domain.Category;
-import grow.together.io.bookmarks.dtoModel.CategoryDtoIn;
-import grow.together.io.bookmarks.dtoModel.DataResponse;
-import grow.together.io.bookmarks.dtoModel.PageableResult;
-import grow.together.io.bookmarks.errorHandler.DeleteNotAllowExeption;
+import grow.together.io.bookmarks.dtomodel.CategoryDtoIn;
+import grow.together.io.bookmarks.dtomodel.DataResponse;
+import grow.together.io.bookmarks.dtomodel.PageableResult;
+import grow.together.io.bookmarks.errorhandler.DeleteNotAllowExeption;
 
 public interface CategoryService {
     DataResponse<Void> save(CategoryDtoIn category);

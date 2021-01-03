@@ -1,10 +1,10 @@
 package grow.together.io.bookmarks.controller;
 
 import grow.together.io.bookmarks.domain.Category;
-import grow.together.io.bookmarks.dtoModel.CategoryDtoIn;
-import grow.together.io.bookmarks.dtoModel.DataResponse;
-import grow.together.io.bookmarks.dtoModel.ErrorValidatorDetail;
-import grow.together.io.bookmarks.dtoModel.PageableResult;
+import grow.together.io.bookmarks.dtomodel.CategoryDtoIn;
+import grow.together.io.bookmarks.dtomodel.DataResponse;
+import grow.together.io.bookmarks.dtomodel.ErrorValidatorDetail;
+import grow.together.io.bookmarks.dtomodel.PageableResult;
 import grow.together.io.bookmarks.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -61,13 +61,4 @@ public class CategoryController {
     public DataResponse<Void> createCategory(@Valid @RequestBody CategoryDtoIn categoryDtoIn) {
         return this.categoryService.save(categoryDtoIn);
     }
-
-//    @DeleteMapping(path = "/{catgId}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ApiOperation(value = "Delete Category")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 500, message = "Error ", response = ErrorValidatorDetail.class)
-//    })
-//    public DataResponse<Void> DeleteCategory(@PathVariable Long catgId) throws DeleteNotAllowExeption {
-//        return this.categoryService.delete(catgId);
-//    }
 }

@@ -26,8 +26,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.isDelete=false")
     Page<User> findAll(Pageable pageable);
 
-    @Query("select u from User u where u.isDelete= false and u.id=:user_id")
-    Optional<User> findById(@Param("user_id") Long user_id);
+    @Query("select u from User u where u.isDelete= false and u.id=:userId")
+    Optional<User> findById(@Param("userId") Long userId);
 
 
     @Query("select count (u.id) from User u where u.isDelete=false  and u.active=true")

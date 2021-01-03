@@ -1,8 +1,8 @@
 package grow.together.io.bookmarks.config;
 
-import grow.together.io.bookmarks.errorHandler.CustomAccessDeniedHandler;
-import grow.together.io.bookmarks.errorHandler.CustomAuthenticationEntryPoint;
-import grow.together.io.bookmarks.serviceImpl.CustomerUserService;
+import grow.together.io.bookmarks.errorhandler.CustomAccessDeniedHandler;
+import grow.together.io.bookmarks.errorhandler.CustomAuthenticationEntryPoint;
+import grow.together.io.bookmarks.serviceimpl.CustomerUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,7 +50,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/v1/bookmarks/admin/role"
                 ).permitAll()
                 .anyRequest().authenticated()
-                .and().exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint()).accessDeniedHandler(new CustomAccessDeniedHandler());
+                .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler);
     }
 
     @Override
@@ -74,12 +74,6 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(usersService).passwordEncoder(encoder());
-//    }
-
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -96,9 +90,5 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
-//    @Override
-//    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-//        resources.resourceId(resourceIds).tokenServices(tokenServices);
-//    }
 
 }

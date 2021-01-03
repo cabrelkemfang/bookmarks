@@ -1,8 +1,8 @@
 package grow.together.io.bookmarks.controller;
 
-import grow.together.io.bookmarks.dtoModel.DataResponse;
-import grow.together.io.bookmarks.dtoModel.PageableResult;
-import grow.together.io.bookmarks.dtoModel.PostDtoOut;
+import grow.together.io.bookmarks.dtomodel.DataResponse;
+import grow.together.io.bookmarks.dtomodel.PageableResult;
+import grow.together.io.bookmarks.dtomodel.PostDtoOut;
 import grow.together.io.bookmarks.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

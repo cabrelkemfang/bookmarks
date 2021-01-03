@@ -23,8 +23,8 @@ public interface PostRepository extends JpaRepository<Posts, Long> {
     @Query("Select COUNT(p.id) from Posts p Where  p.isDeleted = false and p.categories  in (select c from Category c where c.id = :id)")
     long categoryCount(@Param("id") Long id);
 
-    @Query("select p from Posts p where p.user.id =:user_id and p.isDeleted = false")
-    Page<Posts> findPostsByUserId(@Param("user_id") Long user_id, Pageable pageable);
+    @Query("select p from Posts p where p.user.id =:userId and p.isDeleted = false")
+    Page<Posts> findPostsByUserId(@Param("userId") Long userId, Pageable pageable);
 
     @Query("select p from Posts p where p.isDeleted = false")
     Page<Posts> findPostsByAdmin(Pageable pageable);
@@ -38,11 +38,11 @@ public interface PostRepository extends JpaRepository<Posts, Long> {
     @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false order by p.link asc")
     Page<Posts> findPosts(Pageable pageable);
 
-    @Query("select p from Posts p where p.id =:post_id and p.user.id =:user_id and p.isDeleted=false")
-    Optional<Posts> findByPostIdAndUserId(@Param("post_id") Long post_id, @Param("user_id") Long user_id);
+    @Query("select p from Posts p where p.id =:postId and p.user.id =:userId and p.isDeleted=false")
+    Optional<Posts> findByPostIdAndUserId(@Param("postId") Long postId, @Param("userId") Long userId);
 
-    @Query("select count(p.id) from Posts p where p.user.id=:user_id and p.status =:status and p.isDeleted=false ")
-    long countPostByStatus(@Param("user_id") Long user_id, @Param("status") GroupStatus status);
+    @Query("select count(p.id) from Posts p where p.user.id=:userId and p.status =:status and p.isDeleted=false ")
+    long countPostByStatus(@Param("userId") Long userId, @Param("status") GroupStatus status);
 
     @Query("select count(p.id) from  Posts p where p.isDeleted=false")
     long countByPost();

@@ -2,8 +2,8 @@ package grow.together.io.bookmarks.validator.annotation;
 
 import grow.together.io.bookmarks.domain.Subscriber;
 import grow.together.io.bookmarks.domain.User;
-import grow.together.io.bookmarks.dtoModel.SubcriberDtoIn;
-import grow.together.io.bookmarks.dtoModel.UserDtaoIn;
+import grow.together.io.bookmarks.dtomodel.SubcriberDtoIn;
+import grow.together.io.bookmarks.dtomodel.UserDtaoIn;
 import grow.together.io.bookmarks.repository.SubscribersRepository;
 import grow.together.io.bookmarks.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

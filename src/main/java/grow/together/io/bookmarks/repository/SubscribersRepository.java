@@ -12,9 +12,6 @@ public interface SubscribersRepository extends JpaRepository<Subscriber, Long> {
 
     Optional<Subscriber> findByEmail(String email);
 
-//    @Query("select s from Subscriber s where s.status= 'SUBSCRIBE' ")
-//    Page<Subscriber> getAllSubscribers(Pageable pageable);
-
     @Query("select count (s.id) from  Subscriber s where s.status='SUBSCRIBE'")
     long countBySubscriber();
 }

@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.config;
 
-import grow.together.io.bookmarks.errorHandler.CustomOauthException;
+import grow.together.io.bookmarks.errorhandler.CustomOauthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
