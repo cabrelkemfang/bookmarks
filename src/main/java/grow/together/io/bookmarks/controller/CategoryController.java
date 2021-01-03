@@ -5,7 +5,6 @@ import grow.together.io.bookmarks.dtoModel.CategoryDtoIn;
 import grow.together.io.bookmarks.dtoModel.DataResponse;
 import grow.together.io.bookmarks.dtoModel.ErrorValidatorDetail;
 import grow.together.io.bookmarks.dtoModel.PageableResult;
-import grow.together.io.bookmarks.errorHandler.DeleteNotAllowExeption;
 import grow.together.io.bookmarks.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,22 +35,22 @@ public class CategoryController {
         return this.categoryService.findAll(page, size);
     }
 
-    @GetMapping(path = "/{categ_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{catgId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retrieve Category By Id")
     @ApiResponses(value = {
             @ApiResponse(code = 500, message = "Error ", response = ErrorValidatorDetail.class)
     })
-    public DataResponse<Category> getCategoryById(@PathVariable Long categ_id) {
-        return this.categoryService.findById(categ_id);
+    public DataResponse<Category> getCategoryById(@PathVariable Long catgId) {
+        return this.categoryService.findById(catgId);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/{categ_id}")
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/{catgId}")
     @ApiOperation(value = "Update Category")
     @ApiResponses(value = {
             @ApiResponse(code = 500, message = "Error ", response = ErrorValidatorDetail.class)
     })
-    public DataResponse<Void> updateCategory(@Valid @RequestBody CategoryDtoIn categoryDtoIn, @PathVariable Long categ_id) {
-        return this.categoryService.update(categ_id, categoryDtoIn);
+    public DataResponse<Void> updateCategory(@Valid @RequestBody CategoryDtoIn categoryDtoIn, @PathVariable Long catgId) {
+        return this.categoryService.update(catgId, categoryDtoIn);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -63,12 +62,12 @@ public class CategoryController {
         return this.categoryService.save(categoryDtoIn);
     }
 
-//    @DeleteMapping(path = "/{categ_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @DeleteMapping(path = "/{catgId}", produces = MediaType.APPLICATION_JSON_VALUE)
 //    @ApiOperation(value = "Delete Category")
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 500, message = "Error ", response = ErrorValidatorDetail.class)
 //    })
-//    public DataResponse<Void> DeleteCategory(@PathVariable Long categ_id) throws DeleteNotAllowExeption {
-//        return this.categoryService.delete(categ_id);
+//    public DataResponse<Void> DeleteCategory(@PathVariable Long catgId) throws DeleteNotAllowExeption {
+//        return this.categoryService.delete(catgId);
 //    }
 }

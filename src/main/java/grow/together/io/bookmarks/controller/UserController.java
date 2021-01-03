@@ -36,14 +36,14 @@ public class UserController {
         return this.postService.getAllPostByUserId(page, size, principal.getName());
     }
 
-    @GetMapping(path = "post/{post_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(@PathVariable Long post_id, Principal principal) {
-        return this.postService.getPostByUserIdAndPostId(post_id, principal.getName());
+    @GetMapping(path = "post/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(@PathVariable Long postId, Principal principal) {
+        return this.postService.getPostByUserIdAndPostId(postId, principal.getName());
     }
 
-    @PostMapping(path = "/post/{post_id}")
-    public DataResponse<Void> deletePost(@PathVariable Long post_id, Principal principal) {
-        return this.postService.deletePostByUser(post_id, principal.getName());
+    @PostMapping(path = "/post/{postId}")
+    public DataResponse<Void> deletePost(@PathVariable Long postId, Principal principal) {
+        return this.postService.deletePostByUser(postId, principal.getName());
     }
 
     @PutMapping()
@@ -52,13 +52,13 @@ public class UserController {
     }
 
 
-    @PutMapping(path = "/post/{post_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DataResponse<Void> updatePost(@PathVariable Long post_id, @Valid @RequestBody PostDtoIn postDtoIn, Principal principal) {
-        return this.postService.updatePostByUser(post_id, postDtoIn, principal.getName());
+    @PutMapping(path = "/post/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public DataResponse<Void> updatePost(@PathVariable Long postId, @Valid @RequestBody PostDtoIn postDtoIn, Principal principal) {
+        return this.postService.updatePostByUser(postId, postDtoIn, principal.getName());
     }
 
-    @GetMapping(path = "/{user_id}/reports")
-    public DataResponse<UserSummaryReport> getPostSummaryReports(@PathVariable Long user_id) {
-        return this.reportService.getSummaryPostReportByUser(user_id);
+    @GetMapping(path = "/{userId}/reports")
+    public DataResponse<UserSummaryReport> getPostSummaryReports(@PathVariable Long userId) {
+        return this.reportService.getSummaryPostReportByUser(userId);
     }
 }

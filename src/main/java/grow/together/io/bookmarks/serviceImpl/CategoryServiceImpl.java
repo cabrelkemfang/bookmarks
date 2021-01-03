@@ -49,11 +49,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public DataResponse<Void> update(Long categ_id, CategoryDtoIn categoryDtoIn) {
+    public DataResponse<Void> update(Long catgId, CategoryDtoIn categoryDtoIn) {
 
-        // check if category with id categ_id exist
-        Category category = this.categoryRepository.findById(categ_id).orElseThrow(
-                () -> new ResourceNotFoundException("Category With id :" + categ_id + " Not Found"));
+        // check if category with id catgId exist
+        Category category = this.categoryRepository.findById(catgId).orElseThrow(
+                () -> new ResourceNotFoundException("Category With id :" + catgId + " Not Found"));
 
         category.setName(categoryDtoIn.getName());
         this.categoryRepository.save(category);
@@ -62,20 +62,20 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public DataResponse<Void> delete(Long catg_id) throws DeleteNotAllowExeption {
-        long count = this.postRepository.categoryCount(catg_id);
+    public DataResponse<Void> delete(Long catgId) throws DeleteNotAllowExeption {
+        long count = this.postRepository.categoryCount(catgId);
         if (count != 0) {
             throw new DeleteNotAllowExeption("The Role Can't be deleted because it is currently been use");
         } else {
-            this.categoryRepository.deleteById(catg_id);
+            this.categoryRepository.deleteById(catgId);
         }
         return new DataResponse<>("Category Successfully Deleted", HttpStatus.NO_CONTENT.value());
     }
 
     @Override
-    public DataResponse<Category> findById(Long catg_id) {
-        Category category = this.categoryRepository.findById(catg_id).orElseThrow(
-                () -> new ResourceNotFoundException("Category With Id :" + catg_id + " Not Found"));
+    public DataResponse<Category> findById(Long catgId) {
+        Category category = this.categoryRepository.findById(catgId).orElseThrow(
+                () -> new ResourceNotFoundException("Category With Id :" + catgId + " Not Found"));
 
         return new DataResponse<>("Category Load Successfully", HttpStatus.OK.value(), category);
     }

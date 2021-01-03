@@ -3,7 +3,6 @@ package grow.together.io.bookmarks.serviceImpl;
 import grow.together.io.bookmarks.domain.Permission;
 import grow.together.io.bookmarks.domain.Role;
 import grow.together.io.bookmarks.domain.User;
-import grow.together.io.bookmarks.errorHandler.ResourceNotFoundException;
 import grow.together.io.bookmarks.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +28,7 @@ public class CustomerUserService implements UserDetailsService {
     @Value("${spring.aouth.max-failled-attempts}")
     private int maxFailledAttempts;
     @Value("${spring.aouth.lock-time}")
-    public int failledTime;
+    public int failedTime;
 
     @Autowired
     public CustomerUserService(UserRepository userRepository) {
@@ -45,7 +43,7 @@ public class CustomerUserService implements UserDetailsService {
         if (!userInfo.isPresent()) {
             throw new UsernameNotFoundException("UserName or password Not Correct");
         } else if (!userInfo.get().isAccountNonLocked()) {
-            throw new grow.together.io.bookmarks.errorHandler.UsernameNotFoundException("Your account has been locked due to " + maxFailledAttempts + " failed attempts. It will be unlocked after " + failledTime + " minutes.");
+            throw new grow.together.io.bookmarks.errorHandler.UsernameNotFoundException("Your account has been locked due to " + maxFailledAttempts + " failed attempts. It will be unlocked after " + failedTime + " minutes.");
         } else if (!userInfo.get().isActive()) {
             throw new UsernameNotFoundException("You Account Have Not yet been Activated Please Contact The Admin");
         } else if (userInfo.get().isDelete()) {

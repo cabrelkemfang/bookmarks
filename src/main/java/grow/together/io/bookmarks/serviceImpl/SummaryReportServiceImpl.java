@@ -35,11 +35,11 @@ public class SummaryReportServiceImpl implements ReportService {
     }
 
     @Override
-    public DataResponse<UserSummaryReport> getSummaryPostReportByUser(Long user_id) {
+    public DataResponse<UserSummaryReport> getSummaryPostReportByUser(Long userId) {
 
         UserSummaryReport userSummaryReport = new UserSummaryReport();
-        userSummaryReport.setTotalPrivatePosts(this.postRepository.countPostByStatus(user_id, GroupStatus.PRIVATE));
-        userSummaryReport.setTotalPublicPosts(this.postRepository.countPostByStatus(user_id, GroupStatus.PUBLIC));
+        userSummaryReport.setTotalPrivatePosts(this.postRepository.countPostByStatus(userId, GroupStatus.PRIVATE));
+        userSummaryReport.setTotalPublicPosts(this.postRepository.countPostByStatus(userId, GroupStatus.PUBLIC));
 
         return new DataResponse<>("Summary Report", HttpStatus.OK.value(), userSummaryReport);
     }

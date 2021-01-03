@@ -25,14 +25,14 @@ public class PostController {
         return this.postService.getAllPost(page, size);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{post_id}")
-    public DataResponse<PostDtoOut> getPostById(@PathVariable Long post_id) {
-        return this.postService.getPostById(post_id);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{postId}")
+    public DataResponse<PostDtoOut> getPostById(@PathVariable Long postId) {
+        return this.postService.getPostById(postId);
     }
 
-    @PutMapping(path = "/{post_id}/value/{status}")
-    public DataResponse<Void> updateVueOrLike(@PathVariable Long post_id, @PathVariable String status) {
-        return this.postService.updateVueOrLike(post_id, status);
+    @PutMapping(path = "/{postId}/value/{status}")
+    public DataResponse<Void> updateVueOrLike(@PathVariable Long postId, @PathVariable String status) {
+        return this.postService.updateVueOrLike(postId, status);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/recent")
@@ -47,11 +47,11 @@ public class PostController {
         return this.postService.getMostLikePost(page, size);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post/category/{cat_name}")
-    public PageableResult<PostDtoOut> getPostByCategory(@PathVariable String cat_name,
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post/category/{categName}")
+    public PageableResult<PostDtoOut> getPostByCategory(@PathVariable String categName,
                                                         @RequestParam(required = false, defaultValue = "1") int page,
                                                         @RequestParam(required = false, defaultValue = "9") int size) {
-        return this.postService.getPostByCategory(page, size, cat_name);
+        return this.postService.getPostByCategory(page, size, categName);
     }
 
 }

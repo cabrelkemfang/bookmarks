@@ -20,9 +20,9 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @GetMapping(path = "/{role_id}")
-    public DataResponse<RoleDtoOut> getRoleByid(@PathVariable Long role_id) {
-        return this.roleService.getRoleById(role_id);
+    @GetMapping(path = "/{roleId}")
+    public DataResponse<RoleDtoOut> getRoleByid(@PathVariable Long roleId) {
+        return this.roleService.getRoleById(roleId);
     }
 
     @PostMapping
@@ -36,13 +36,13 @@ public class RoleController {
         return this.roleService.getAllRole(page, size);
     }
 
-    @DeleteMapping(path = "/{role_id}")
-    public DataResponse<Void> deleteRole(@PathVariable Long role_id) {
-        return this.roleService.deleteRole(role_id);
+    @DeleteMapping(path = "/{roleId}")
+    public DataResponse<Void> deleteRole(@PathVariable Long roleId) {
+        return this.roleService.deleteRole(roleId);
     }
 
-    @PutMapping(path = "/{role_id}")
-    public DataResponse<Void> updateRole(@Valid @RequestBody RoleDtoIn roleDtoIn, @PathVariable Long role_id) {
-        return this.roleService.updateRole(role_id, roleDtoIn);
+    @PutMapping(path = "/{roleId}")
+    public DataResponse<Void> updateRole(@Valid @RequestBody RoleDtoIn roleDtoIn, @PathVariable Long roleId) {
+        return this.roleService.updateRole(roleId, roleDtoIn);
     }
 }

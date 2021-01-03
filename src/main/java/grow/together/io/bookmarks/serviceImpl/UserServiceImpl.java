@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.serviceImpl;
 
-import grow.together.io.bookmarks.config.SpringSecurityAuditor;
+
 import grow.together.io.bookmarks.domain.GroupStatus;
 import grow.together.io.bookmarks.domain.Role;
 import grow.together.io.bookmarks.domain.User;
@@ -99,15 +99,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DataResponse<UserDtaoOut> getUserById(Long user_id) {
-        User user = this.getById(user_id);
+    public DataResponse<UserDtaoOut> getUserById(Long userId) {
+        User user = this.getById(userId);
         return new DataResponse<>("User Load Successfully", HttpStatus.OK.value(), getUserDtaoOut(user, this.postRepository));
     }
 
     @Override
-    public DataResponse<Void> updateUserStatus(Long user_id, boolean status) {
+    public DataResponse<Void> updateUserStatus(Long userId, boolean status) {
 
-        User user = this.getById(user_id);
+        User user = this.getById(userId);
 
         user.setActive(status);
         this.userRepository.save(user);
@@ -141,8 +141,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public User getById(Long user_id) {
-        return this.userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("No User Found With Id :" + user_id));
+    public User getById(Long userId) {
+        return this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No User Found With Id :" + userId));
     }
 
 

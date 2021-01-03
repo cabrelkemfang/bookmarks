@@ -29,14 +29,14 @@ public class AdminController {
         return this.userService.getAllUser(page, size);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/user/{user_id}")
-    public DataResponse<UserDtaoOut> getUserById(@PathVariable long user_id) {
-        return this.userService.getUserById(user_id);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/user/{userId}")
+    public DataResponse<UserDtaoOut> getUserById(@PathVariable long userId) {
+        return this.userService.getUserById(userId);
     }
 
-    @PutMapping(path = "/user/{user_id}/status/{status}")
-    public DataResponse<Void> updateStatus(@PathVariable Long user_id, @PathVariable boolean status) {
-        return this.userService.updateUserStatus(user_id, status);
+    @PutMapping(path = "/user/{userId}/status/{status}")
+    public DataResponse<Void> updateStatus(@PathVariable Long userId, @PathVariable boolean status) {
+        return this.userService.updateUserStatus(userId, status);
     }
 
     @GetMapping(path = "/summary-reports")

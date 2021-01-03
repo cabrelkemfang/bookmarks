@@ -1,6 +1,5 @@
 package grow.together.io.bookmarks.serviceImpl;
 
-import grow.together.io.bookmarks.config.SpringSecurityAuditor;
 import grow.together.io.bookmarks.domain.*;
 import grow.together.io.bookmarks.dtoModel.DataResponse;
 import grow.together.io.bookmarks.dtoModel.PageableResult;
@@ -41,8 +40,8 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public DataResponse<PostDtoOut> getPostById(Long post_id) {
-        Posts post = getById(post_id);
+    public DataResponse<PostDtoOut> getPostById(Long postId) {
+        Posts post = getById(postId);
 
         return new DataResponse<>("Post Load Successfully", HttpStatus.OK.value(), new PostDtoOut(post));
     }
@@ -91,10 +90,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public DataResponse<Void> updatePostByUser(Long post_id, PostDtoIn postDtoIn, String name) {
+    public DataResponse<Void> updatePostByUser(Long postId, PostDtoIn postDtoIn, String name) {
         User user = getUser(name);
 
-        Posts posts = this.postRepository.findByPostIdAndUserId(post_id, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Post Not Found with id " + post_id));
+        Posts posts = this.postRepository.findByPostIdAndUserId(postId, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Post Not Found with id " + postId));
 
         posts.setStatus(GroupStatus.valueOf(postDtoIn.getStatus()));
         posts.setTitle(postDtoIn.getTitle());
@@ -114,10 +113,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public DataResponse<Void> deletePostByUser(Long post_id, String name) {
+    public DataResponse<Void> deletePostByUser(Long postId, String name) {
         User user = getUser(name);
 
-        Posts posts = this.postRepository.findByPostIdAndUserId(post_id, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Post Not Found with id " + post_id));
+        Posts posts = this.postRepository.findByPostIdAndUserId(postId, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Post Not Found with id " + postId));
         posts.setDeleted(true);
         this.postRepository.save(posts);
         return new DataResponse<>("Post Deleted Successfully ", HttpStatus.NO_CONTENT.value());
@@ -139,10 +138,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long post_id, String name) {
+    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long postId, String name) {
         User user = getUser(name);
-        Posts post = this.postRepository.findByPostIdAndUserId(post_id, user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("No result Found For Post Id :" + post_id + " And User Id " + user.getId()));
+        Posts post = this.postRepository.findByPostIdAndUserId(postId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("No result Found For Post Id :" + postId + " And User Id " + user.getId()));
 
         return new DataResponse<>("Post Load Successfully", HttpStatus.OK.value(), new PostDtoOut(post));
     }
@@ -220,8 +219,8 @@ public class PostServiceImpl implements PostService {
                 posts.getContent().stream().map(PostDtoOut::new).collect(Collectors.toList()));
     }
 
-    Posts getById(Long post_id) {
-        return this.postRepository.findById(post_id).orElseThrow(() -> new ResourceNotFoundException("Post Not Found With id " + post_id));
+    Posts getById(Long postId) {
+        return this.postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post Not Found With id " + postId));
     }
 
 
