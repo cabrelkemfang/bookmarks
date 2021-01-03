@@ -10,15 +10,15 @@ public interface PostService {
 
     PageableResult<PostDtoOut> getAllPost(int page, int size);
 
-    DataResponse<Void> createPostByUser(PostDtoIn postDtoIn);
+    DataResponse<Void> createPostByUser(PostDtoIn postDtoIn, String name);
 
-    DataResponse<Void> updatePostByUser(Long post_id, PostDtoIn postDtoIn);
+    DataResponse<Void> updatePostByUser(Long post_id, PostDtoIn postDtoIn, String name);
 
-    DataResponse<Void> deletePostByUser( Long post_id);
+    DataResponse<Void> deletePostByUser(Long post_id, String name);
 
-    PageableResult<PostDtoOut> getAllPostByUserId(int page, int size);
+    PageableResult<PostDtoOut> getAllPostByUserId(int page, int size, String name);
 
-    DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long post_id);
+    DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long post_id, String name);
 
     DataResponse<Void> updateVueOrLike(Long id, String status);
 

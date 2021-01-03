@@ -30,15 +30,13 @@ public class PostServiceImpl implements PostService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final CategoryService categoryService;
-    private final SpringSecurityAuditor springSecurityAuditor;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, CategoryRepository categoryRepository, UserRepository userRepository, CategoryService categoryService, SpringSecurityAuditor springSecurityAuditor) {
+    public PostServiceImpl(PostRepository postRepository, CategoryRepository categoryRepository, UserRepository userRepository, CategoryService categoryService) {
         this.postRepository = postRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.categoryService = categoryService;
-        this.springSecurityAuditor = springSecurityAuditor;
     }
 
 
@@ -66,7 +64,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public DataResponse<Void> createPostByUser(PostDtoIn postDtoIn) {
+    public DataResponse<Void> createPostByUser(PostDtoIn postDtoIn,String name) {
 
         Posts posts = new Posts();
         posts.setLink(postDtoIn.getLink());
@@ -81,7 +79,7 @@ public class PostServiceImpl implements PostService {
                         () -> new ResourceNotFoundException("Category With Name " + postDtoIn.getCategory() + " Not Found")))
                 .collect(Collectors.toList());
 
-        User user = getUser(this.springSecurityAuditor.getCurrentAuditor().get());
+        User user = getUser(name);
 
         posts.setCategories(categories);
         posts.setUser(user);
@@ -93,8 +91,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public DataResponse<Void> updatePostByUser(Long post_id, PostDtoIn postDtoIn) {
-        User user = getUser(this.springSecurityAuditor.getCurrentAuditor().get());
+    public DataResponse<Void> updatePostByUser(Long post_id, PostDtoIn postDtoIn, String name) {
+        User user = getUser(name);
 
         Posts posts = this.postRepository.findByPostIdAndUserId(post_id, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Post Not Found with id " + post_id));
 
@@ -116,8 +114,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public DataResponse<Void> deletePostByUser(Long post_id) {
-        User user = getUser(this.springSecurityAuditor.getCurrentAuditor().get());
+    public DataResponse<Void> deletePostByUser(Long post_id, String name) {
+        User user = getUser(name);
 
         Posts posts = this.postRepository.findByPostIdAndUserId(post_id, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Post Not Found with id " + post_id));
         posts.setDeleted(true);
@@ -126,11 +124,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PageableResult<PostDtoOut> getAllPostByUserId(int page, int size) {
+    public PageableResult<PostDtoOut> getAllPostByUserId(int page, int size, String name) {
         if (page < 0) {
             throw new BadRequestException("Page number cannot be less than zero.");
         }
-        User user = getUser(this.springSecurityAuditor.getCurrentAuditor().get());
+        User user = getUser(name);
 
         Page<Posts> posts = this.postRepository.findPostsByUserId(user.getId(), PageRequest.of(page - 1, size));
         return new PageableResult<>(page,
@@ -141,8 +139,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long post_id) {
-        User user = getUser(this.springSecurityAuditor.getCurrentAuditor().get());
+    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long post_id, String name) {
+        User user = getUser(name);
         Posts post = this.postRepository.findByPostIdAndUserId(post_id, user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("No result Found For Post Id :" + post_id + " And User Id " + user.getId()));
 
