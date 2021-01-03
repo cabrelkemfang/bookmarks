@@ -37,17 +37,15 @@ public class UserServiceImpl implements UserService {
     private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenStore tokenStore;
-    private final SpringSecurityAuditor springSecurityAuditor;
     private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PostRepository postRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore, SpringSecurityAuditor springSecurityAuditor, ApplicationEventPublisher eventPublisher) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PostRepository postRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore, ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.postRepository = postRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenStore = tokenStore;
-        this.springSecurityAuditor = springSecurityAuditor;
         this.eventPublisher = eventPublisher;
     }
 
@@ -118,8 +116,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DataResponse<Void> updateUser(UserDtaoIn userDtaoIn) {
-        User user = getUser(this.springSecurityAuditor.getCurrentAuditor().get());
+    public DataResponse<Void> updateUser(UserDtaoIn userDtaoIn, String name) {
+        User user = getUser(name);
 
         this.userRepository.save(userMapper(user, userDtaoIn, roleRepository));
 

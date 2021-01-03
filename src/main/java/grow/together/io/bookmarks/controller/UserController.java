@@ -47,8 +47,8 @@ public class UserController {
     }
 
     @PutMapping()
-    public DataResponse<Void> updateUser(@Valid @RequestBody UserDtaoIn userDtaoIn) {
-        return this.userService.updateUser(userDtaoIn);
+    public DataResponse<Void> updateUser(@Valid @RequestBody UserDtaoIn userDtaoIn, Principal principal) {
+        return this.userService.updateUser(userDtaoIn, principal.getName());
     }
 
 
