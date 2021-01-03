@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/bookmarks/admin")
+@RequestMapping("/api/bookmarks/v1/admin")
 public class AdminController {
 
     private final PostService postService;

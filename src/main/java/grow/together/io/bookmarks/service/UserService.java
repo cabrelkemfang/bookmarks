@@ -17,7 +17,7 @@ public interface UserService {
 
     DataResponse<Void> updateUserStatus(Long user_id, boolean status);
 
-    DataResponse<Void> updateUser(Long user_id, UserDtaoIn userDtaoIn);
+    DataResponse<Void> updateUser(UserDtaoIn userDtaoIn);
 
     DataResponse<Void> logout(HttpServletRequest request);
 }

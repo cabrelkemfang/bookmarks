@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/bookmarks")
+@RequestMapping("/api/bookmarksv1/")
 public class SusbcriberController {
 
     private final SubscriberService subscriberService;

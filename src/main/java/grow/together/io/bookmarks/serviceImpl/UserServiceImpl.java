@@ -1,5 +1,6 @@
 package grow.together.io.bookmarks.serviceImpl;
 
+import grow.together.io.bookmarks.config.SpringSecurityAuditor;
 import grow.together.io.bookmarks.domain.GroupStatus;
 import grow.together.io.bookmarks.domain.Role;
 import grow.together.io.bookmarks.domain.User;
@@ -9,11 +10,13 @@ import grow.together.io.bookmarks.dtoModel.UserDtaoIn;
 import grow.together.io.bookmarks.dtoModel.UserDtaoOut;
 import grow.together.io.bookmarks.errorHandler.BadRequestException;
 import grow.together.io.bookmarks.errorHandler.ResourceNotFoundException;
+import grow.together.io.bookmarks.eventListener.UserRegistrationEvent;
 import grow.together.io.bookmarks.repository.PostRepository;
 import grow.together.io.bookmarks.repository.RoleRepository;
 import grow.together.io.bookmarks.repository.UserRepository;
 import grow.together.io.bookmarks.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -34,14 +37,18 @@ public class UserServiceImpl implements UserService {
     private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenStore tokenStore;
+    private final SpringSecurityAuditor springSecurityAuditor;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PostRepository postRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PostRepository postRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore, SpringSecurityAuditor springSecurityAuditor, ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.postRepository = postRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenStore = tokenStore;
+        this.springSecurityAuditor = springSecurityAuditor;
+        this.eventPublisher = eventPublisher;
     }
 
 
@@ -58,7 +65,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("Role Not Found with Role Name: " + userDtaoIn.getRole()));
         user.setRole(role);
         this.userRepository.save(user);
-
+        eventPublisher.publishEvent(new UserRegistrationEvent(user));
         return new DataResponse<>("User Created Successfully", HttpStatus.CREATED.value());
     }
 
@@ -111,8 +118,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DataResponse<Void> updateUser(Long user_id, UserDtaoIn userDtaoIn) {
-        User user = this.getById(user_id);
+    public DataResponse<Void> updateUser(UserDtaoIn userDtaoIn) {
+        User user = getUser(this.springSecurityAuditor.getCurrentAuditor().get());
 
         this.userRepository.save(userMapper(user, userDtaoIn, roleRepository));
 
@@ -138,6 +145,11 @@ public class UserServiceImpl implements UserService {
 
     public User getById(Long user_id) {
         return this.userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("No User Found With Id :" + user_id));
+    }
+
+
+    User getUser(String email) {
+        return this.userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User Not Found With User Email " + email));
     }
 
 

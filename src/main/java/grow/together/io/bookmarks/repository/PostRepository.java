@@ -1,6 +1,7 @@
 package grow.together.io.bookmarks.repository;
 
 
+import grow.together.io.bookmarks.domain.Category;
 import grow.together.io.bookmarks.domain.GroupStatus;
 import grow.together.io.bookmarks.domain.Posts;
 import grow.together.io.bookmarks.domain.User;
@@ -45,4 +46,8 @@ public interface PostRepository extends JpaRepository<Posts, Long> {
 
     @Query("select count(p.id) from  Posts p where p.isDeleted=false")
     long countByPost();
+
+    @Query("select p from Posts p where p.categories in :category and p.isDeleted=false")
+    Page<Posts> findByCategoriesIn(@Param("category") Category category, Pageable pageable);
+
 }

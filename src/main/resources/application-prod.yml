@@ -1,0 +1,22 @@
+
+#Datasource configuration
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: mysql://us-cdbr-east-02.cleardb.com:3306/heroku_ca6f3f3322ccb71
+    username: b804e9fa03b474
+    password: 81ca193c
+  aouth:
+    client_id: bootmarks-client-id
+    client_secret: bootmarks-client-secret
+    tokenValidity: 9000
+    refrechTokenValidity: 9000
+    auth_server: http://localhost:7075/oauth/token
+    resourceIds: resources-api
+    signingKey: 123
+    max-failled-attempts: 3
+    lock-time: 5
+
+cron-jop: 0 0 1 * * ?

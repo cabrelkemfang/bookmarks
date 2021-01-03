@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/bookmarks/post")
+@RequestMapping("/api/bookmarks/v1/post")
 public class PostController {
 
     private final PostService postService;
@@ -45,6 +45,13 @@ public class PostController {
     public PageableResult<PostDtoOut> getMostLikePost(@RequestParam(required = false, defaultValue = "1") int page,
                                                       @RequestParam(required = false, defaultValue = "5") int size) {
         return this.postService.getMostLikePost(page, size);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post/category/{cat_name}")
+    public PageableResult<PostDtoOut> getPostByCategory(@PathVariable String cat_name,
+                                                        @RequestParam(required = false, defaultValue = "1") int page,
+                                                        @RequestParam(required = false, defaultValue = "9") int size) {
+        return this.postService.getPostByCategory(page, size, cat_name);
     }
 
 }

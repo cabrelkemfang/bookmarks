@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -40,6 +41,8 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
                 .authorizeRequests()
                 .antMatchers(
                         "/oauth/token",
@@ -54,8 +57,11 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers(
                 "/v2/api-docs",
+                "/configuration/ui/**",
                 "/swagger-resources/**",
+                "/configuration/security/**",
                 "/swagger-ui.html",
+                "/webjars/**",
                 "/api/v1/bookmarks/oauth/sign-up",
                 "/api/v1/bookmarks/admin/role");
     }

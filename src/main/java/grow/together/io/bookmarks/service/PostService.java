@@ -10,15 +10,15 @@ public interface PostService {
 
     PageableResult<PostDtoOut> getAllPost(int page, int size);
 
-    DataResponse<Void> createPostByUser(Long user_id, PostDtoIn postDtoIn);
+    DataResponse<Void> createPostByUser(PostDtoIn postDtoIn);
 
-    DataResponse<Void> updatePostByUser(Long user_id, Long post_id, PostDtoIn postDtoIn);
+    DataResponse<Void> updatePostByUser(Long post_id, PostDtoIn postDtoIn);
 
-    DataResponse<Void> deletePostByUser(Long user_id, Long post_id);
+    DataResponse<Void> deletePostByUser( Long post_id);
 
-    PageableResult<PostDtoOut> getAllPostByUserId(Long user_id, int page, int size);
+    PageableResult<PostDtoOut> getAllPostByUserId(int page, int size);
 
-    DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long user_id, Long post_id);
+    DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long post_id);
 
     DataResponse<Void> updateVueOrLike(Long id, String status);
 
@@ -27,4 +27,6 @@ public interface PostService {
     PageableResult<PostDtoOut> getMostLikePost(int page, int size);
 
     PageableResult<PostDtoOut> getRecentPost(int page, int size);
+
+    PageableResult<PostDtoOut> getPostByCategory(int page, int size, String category_name);
 }

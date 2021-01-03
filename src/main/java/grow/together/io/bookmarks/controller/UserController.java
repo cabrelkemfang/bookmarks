@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/bookmarks/user")
+@RequestMapping("/api/bookmarks/v1/user")
 public class UserController {
     private final PostService postService;
     private final UserService userService;
@@ -24,37 +24,36 @@ public class UserController {
         this.reportService = reportService;
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/{user_id}/post")
-    public DataResponse<Void> createPost(@Valid @RequestBody PostDtoIn postDtoIn, @PathVariable Long user_id) {
-        return this.postService.createPostByUser(user_id, postDtoIn);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/post")
+    public DataResponse<Void> createPost(@Valid @RequestBody PostDtoIn postDtoIn) {
+        return this.postService.createPostByUser(postDtoIn);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{user_id}/post")
-    public PageableResult<PostDtoOut> getPostByUserId(@PathVariable Long user_id,
-                                                      @RequestParam(required = false, defaultValue = "1") int page,
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post")
+    public PageableResult<PostDtoOut> getPostByUserId(@RequestParam(required = false, defaultValue = "1") int page,
                                                       @RequestParam(required = false, defaultValue = "9") int size) {
-        return this.postService.getAllPostByUserId(user_id, page, size);
+        return this.postService.getAllPostByUserId(page, size);
     }
 
-    @GetMapping(path = "/{user_id}/post/{post_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(@PathVariable Long user_id, @PathVariable Long post_id) {
-        return this.postService.getPostByUserIdAndPostId(user_id, post_id);
+    @GetMapping(path = "post/{post_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(@PathVariable Long post_id) {
+        return this.postService.getPostByUserIdAndPostId(post_id);
     }
 
-    @PostMapping(path = "/{user_id}/post/{post_id}")
-    public DataResponse<Void> deletePost(@PathVariable Long user_id, @PathVariable Long post_id) {
-        return this.postService.deletePostByUser(user_id, post_id);
+    @PostMapping(path = "/post/{post_id}")
+    public DataResponse<Void> deletePost(@PathVariable Long post_id) {
+        return this.postService.deletePostByUser(post_id);
     }
 
-    @PutMapping(path = "/{user_id}")
-    public DataResponse<Void> updateUser(@PathVariable Long user_d, @Valid @RequestBody UserDtaoIn userDtaoIn) {
-        return this.userService.updateUser(user_d, userDtaoIn);
+    @PutMapping()
+    public DataResponse<Void> updateUser(@Valid @RequestBody UserDtaoIn userDtaoIn) {
+        return this.userService.updateUser(userDtaoIn);
     }
 
 
-    @PutMapping(path = "/{user_id}/post/{post_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DataResponse<Void> updatePost(@PathVariable Long user_id, @PathVariable Long post_id, @Valid @RequestBody PostDtoIn postDtoIn) {
-        return this.postService.updatePostByUser(user_id, post_id, postDtoIn);
+    @PutMapping(path = "/post/{post_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public DataResponse<Void> updatePost(@PathVariable Long post_id, @Valid @RequestBody PostDtoIn postDtoIn) {
+        return this.postService.updatePostByUser(post_id, postDtoIn);
     }
 
     @GetMapping(path = "/{user_id}/reports")

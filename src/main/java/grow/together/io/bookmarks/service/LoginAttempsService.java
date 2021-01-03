@@ -10,5 +10,5 @@ public interface LoginAttempsService {
 
     void lock(User user);
 
-    void unlockWhenTimeExpired(User user);
+    boolean unlockWhenTimeExpired(User user);
 }

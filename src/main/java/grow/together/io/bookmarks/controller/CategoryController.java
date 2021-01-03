@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/bookmarks/admin/category")
+@RequestMapping("/api/bookmarks/v1/admin/category")
 @Api(value = "Category", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CategoryController {
 
@@ -45,7 +45,7 @@ public class CategoryController {
         return this.categoryService.findById(categ_id);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/{categ_id}")
     @ApiOperation(value = "Update Category")
     @ApiResponses(value = {
             @ApiResponse(code = 500, message = "Error ", response = ErrorValidatorDetail.class)
@@ -63,12 +63,12 @@ public class CategoryController {
         return this.categoryService.save(categoryDtoIn);
     }
 
-    @DeleteMapping(path = "/{categ_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Delete Category")
-    @ApiResponses(value = {
-            @ApiResponse(code = 500, message = "Error ", response = ErrorValidatorDetail.class)
-    })
-    public DataResponse<Void> DeleteCategory(@PathVariable Long categ_id) throws DeleteNotAllowExeption {
-        return this.categoryService.delete(categ_id);
-    }
+//    @DeleteMapping(path = "/{categ_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ApiOperation(value = "Delete Category")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 500, message = "Error ", response = ErrorValidatorDetail.class)
+//    })
+//    public DataResponse<Void> DeleteCategory(@PathVariable Long categ_id) throws DeleteNotAllowExeption {
+//        return this.categoryService.delete(categ_id);
+//    }
 }

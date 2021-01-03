@@ -7,6 +7,7 @@ import grow.together.io.bookmarks.errorHandler.ResourceNotFoundException;
 import grow.together.io.bookmarks.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,10 @@ import java.util.stream.Collectors;
 public class CustomerUserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    @Value("${spring.aouth.max-failled-attempts}")
+    private int maxFailledAttempts;
+    @Value("${spring.aouth.lock-time}")
+    public int failledTime;
 
     @Autowired
     public CustomerUserService(UserRepository userRepository) {
@@ -40,7 +45,7 @@ public class CustomerUserService implements UserDetailsService {
         if (!userInfo.isPresent()) {
             throw new UsernameNotFoundException("UserName or password Not Correct");
         } else if (!userInfo.get().isAccountNonLocked()) {
-            throw new UsernameNotFoundException("Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours.");
+            throw new grow.together.io.bookmarks.errorHandler.UsernameNotFoundException("Your account has been locked due to " + maxFailledAttempts + " failed attempts. It will be unlocked after " + failledTime + " minutes.");
         } else if (!userInfo.get().isActive()) {
             throw new UsernameNotFoundException("You Account Have Not yet been Activated Please Contact The Admin");
         } else if (userInfo.get().isDelete()) {

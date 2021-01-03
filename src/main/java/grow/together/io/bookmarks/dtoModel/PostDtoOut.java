@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PostDtoOut {
 
+    private long id;
     private String link;
     private List<String> category;
     private int like;
@@ -25,6 +26,7 @@ public class PostDtoOut {
     private String readTime;
 
     public PostDtoOut(Posts posts) {
+        this.id = posts.getId();
         this.link = posts.getLink();
         this.category = posts.getCategories().stream().map(categ -> categ.getName()).collect(Collectors.toList());
         this.like = posts.getLike();
@@ -34,6 +36,6 @@ public class PostDtoOut {
         this.readTime = posts.getReadTime();
         this.title = posts.getTitle();
         this.status = posts.getStatus().name();
-        this.created_at = this.getCreated_at();
+//        this.created_at = posts.getCreatedAt();
     }
 }

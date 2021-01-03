@@ -29,6 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.isDelete= false and u.id=:user_id")
     Optional<User> findById(@Param("user_id") Long user_id);
 
+
     @Query("select count (u.id) from User u where u.isDelete=false  and u.active=true")
     long countByUsers();
 
@@ -38,9 +39,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     public void updateFailedAttempts(@Param("failAttempts") int failAttempts, @Param("email") String email);
 
-    @Query("select  * from  User  u where u.failedAttempt =:failledAttempt and TIMESTAMPDIFF(MINUTE, u., NOW()) >= :duration")
-    public User getLockUser(@Param("failAttempts") int failAttempts,)
-
-    @Query(value = "Select * From user u Where u.failed_attempt = :failledAttempt and TIMESTAMPDIFF(MINUTE, u.lock_time, NOW()) >= :duration", nativeQuery = true)
-    List<User> getLockUser(@Param("failAttempts") int failAttempts, @Param("duration") int duration);
+    @Query(value = "Select * From user u Where u.failed_attempt = :failedAttempt and TIMESTAMPDIFF(MINUTE, u.lock_time, NOW()) >= :duration", nativeQuery = true)
+    List<User> getLockUser(@Param("failedAttempt") int failedAttempt, @Param("duration") int duration);
 }

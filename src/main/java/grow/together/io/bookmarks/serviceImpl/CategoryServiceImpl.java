@@ -77,7 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = this.categoryRepository.findById(catg_id).orElseThrow(
                 () -> new ResourceNotFoundException("Category With Id :" + catg_id + " Not Found"));
 
-        return new DataResponse<>("Category Successfully Deleted", HttpStatus.OK.value(), category);
+        return new DataResponse<>("Category Load Successfully", HttpStatus.OK.value(), category);
     }
 
     @Override

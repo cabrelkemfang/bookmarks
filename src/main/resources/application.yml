@@ -1,0 +1,32 @@
+
+#spring.profiles.active=@spring.profiles.active@
+
+#Datasource configuration
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      dialect: org.hibernate.dialect.MySQL55Dialect
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookmarks?createDatabaseIfNotExist=true&serverTimezone=Africa/Douala
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: mysql@237
+  aouth:
+    client_id: bootmarks-client-id
+    client_secret: bootmarks-client-secret
+    tokenValidity: 9000
+    refrechTokenValidity: 9000
+    auth_server: http://localhost:7075/oauth/token
+    resourceIds: resources-api
+    signingKey: 123
+    max-failled-attempts: 3
+    lock-time: 5
+
+cron-jop: 0 0 1 * * ?
+
+server:
+  port: 7075

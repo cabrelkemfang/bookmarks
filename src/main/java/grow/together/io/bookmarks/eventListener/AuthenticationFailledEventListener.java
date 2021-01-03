@@ -19,8 +19,10 @@ public class AuthenticationFailledEventListener {
     private final UserRepository userRepository;
     private final LoginAttempsService loginAttempsService;
 
-    @Value("${sprint.max-failled-attempts}")
+    @Value("${spring.aouth.max-failled-attempts}")
     private int maxFailledAttempts;
+    @Value("${spring.aouth.lock-time}")
+    public int failledTime;
 
     @Autowired
     public AuthenticationFailledEventListener(UserRepository userRepository, LoginAttempsService loginAttempsService) {
@@ -38,12 +40,9 @@ public class AuthenticationFailledEventListener {
         // update the failed login count for the user
         if (user.getFailedAttempt() >= maxFailledAttempts) {
             this.loginAttempsService.lock(user);
-            throw new UsernameNotFoundException("Your account has been locked due to 3 failed attempts. It will be unlocked after 24 hours.");
+            throw new UsernameNotFoundException("Your account has been locked due to " + maxFailledAttempts + " failed attempts. It will be unlocked after "+failledTime+" minutes.");
         } else {
             this.loginAttempsService.increaseFailedAttempts(user);
         }
     }
-
-
-
 }

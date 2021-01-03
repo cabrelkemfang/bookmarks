@@ -5,15 +5,13 @@ import grow.together.io.bookmarks.dtoModel.UserDtaoIn;
 import grow.together.io.bookmarks.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/bookmarks/oauth")
+@RequestMapping("/api/bookmarks/v1/oauth")
 public class AuthUserController {
 
     private final UserService userService;
@@ -27,4 +25,9 @@ public class AuthUserController {
     public DataResponse<Void> createUser(@Valid @RequestBody UserDtaoIn userDtaoIn) {
         return this.userService.createUser(userDtaoIn);
     }
+
+//    @DeleteMapping(path = "/logout/{tokenValue}")
+//    public DataResponse<Void> logout(@PathVariable String tokenValue) {
+//        return this.userService.logout(tokenValue);
+//    }
 }

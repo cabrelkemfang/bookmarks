@@ -31,7 +31,8 @@ public class SubscribersServiceImpl implements SubscriberService {
         subscriber.setEmail(subcriberDtoIn.getEmail());
         subscriber.setName(subcriberDtoIn.getName());
         subscriber.setStatus(SubscriberStatus.SUBSCRIBE);
-
+        this.subscribersRepository.save(subscriber);
+        
         return new DataResponse<>("Successfully Subscribe", HttpStatus.CREATED.value());
     }
 
@@ -62,7 +63,7 @@ public class SubscribersServiceImpl implements SubscriberService {
         subscriber.setReason(subscriber.getReason());
         this.subscribersRepository.save(subscriber);
 
-        return new DataResponse<>("Successfully Unsubscribe",HttpStatus.ACCEPTED.value());
+        return new DataResponse<>("Successfully Unsubscribe", HttpStatus.ACCEPTED.value());
     }
 
 }

@@ -1,5 +1,6 @@
 package grow.together.io.bookmarks.dtoModel;
 
+import grow.together.io.bookmarks.validator.annotation.PasswordConfirmed;
 import grow.together.io.bookmarks.validator.annotation.UniqueEmail;
 import grow.together.io.bookmarks.validator.annotation.UniqueGithub;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 @UniqueEmail
+@PasswordConfirmed
 public class UserDtaoIn {
     @NotEmpty(message = "Please Provide The Email")
     @Email(message = "Email Is Not Valid")
