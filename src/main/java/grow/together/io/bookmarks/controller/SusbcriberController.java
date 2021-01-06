@@ -4,6 +4,7 @@ import grow.together.io.bookmarks.dtomodel.*;
 import grow.together.io.bookmarks.service.SubscriberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ public class SusbcriberController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/admin/subscribe")
+    @PreAuthorize("hasAuthority('VIEW_SUBSCRIBER')")
     public PageableResult<SubscriberDtoOut> getAllSubscriber(@RequestParam(required = false, defaultValue = "1") int page,
                                                              @RequestParam(required = false, defaultValue = "10") int size) {
         return this.subscriberService.getAllSubscribers(page, size);
