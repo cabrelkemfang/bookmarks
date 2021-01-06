@@ -6,9 +6,11 @@ import grow.together.io.bookmarks.domain.Subscriber;
 import grow.together.io.bookmarks.dtomodel.*;
 import grow.together.io.bookmarks.errorhandler.BadRequestException;
 import grow.together.io.bookmarks.errorhandler.ResourceNotFoundException;
+import grow.together.io.bookmarks.eventlistener.SubscriptionEvent;
 import grow.together.io.bookmarks.repository.SubscribersRepository;
 import grow.together.io.bookmarks.service.SubscriberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -20,10 +22,12 @@ import java.util.stream.Collectors;
 public class SubscribersServiceImpl implements SubscriberService {
 
     private final SubscribersRepository subscribersRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public SubscribersServiceImpl(SubscribersRepository subscribersRepository) {
+    public SubscribersServiceImpl(SubscribersRepository subscribersRepository, ApplicationEventPublisher eventPublisher) {
         this.subscribersRepository = subscribersRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -33,7 +37,8 @@ public class SubscribersServiceImpl implements SubscriberService {
         subscriber.setName(subcriberDtoIn.getName());
         subscriber.setStatus(SubscriberStatus.SUBSCRIBE);
         this.subscribersRepository.save(subscriber);
-        
+
+        eventPublisher.publishEvent(new SubscriptionEvent(subscriber));
         return new DataResponse<>("Successfully Subscribe", HttpStatus.CREATED.value());
     }
 

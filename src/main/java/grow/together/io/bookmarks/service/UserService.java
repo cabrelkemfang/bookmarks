@@ -14,7 +14,7 @@ public interface UserService {
 
     DataResponse<UserDtaoOut> getUserById(Long user_id);
 
-    DataResponse<Void> updateUserStatus(Long user_id, boolean status);
+    DataResponse<Void> updateUserStatus(String email, boolean status);
 
     DataResponse<Void> updateUser(UserDtaoIn userDtaoIn, String name);
 

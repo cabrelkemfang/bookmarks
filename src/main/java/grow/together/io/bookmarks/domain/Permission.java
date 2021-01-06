@@ -14,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Permission extends AuditableModel {
+public class Permission  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

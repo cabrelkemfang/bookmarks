@@ -34,9 +34,9 @@ public class AdminController {
         return this.userService.getUserById(userId);
     }
 
-    @PutMapping(path = "/user/{userId}/status/{status}")
-    public DataResponse<Void> updateStatus(@PathVariable Long userId, @PathVariable boolean status) {
-        return this.userService.updateUserStatus(userId, status);
+    @PutMapping(path = "/user/{email}/status/{status}")
+    public DataResponse<Void> updateStatus(@PathVariable String email, @PathVariable boolean status) {
+        return this.userService.updateUserStatus(email, status);
     }
 
     @GetMapping(path = "/summary-reports")
