@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.serviceimpl;
 
-import grow.together.io.bookmarks.common.VaraibleName;
+import grow.together.io.bookmarks.common.VariableName;
 import grow.together.io.bookmarks.domain.*;
 import grow.together.io.bookmarks.dtomodel.DataResponse;
 import grow.together.io.bookmarks.dtomodel.PageableResult;
@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PageableResult<PostDtoOut> getAllPost(int page, int size) {
         if (page < 0) {
-            throw new BadRequestException(VaraibleName.PAGE_LESS_THAN_ZERO);
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
 
         Page<Posts> posts = this.postRepository.findPosts(PageRequest.of(page - 1, size));
@@ -123,7 +123,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PageableResult<PostDtoOut> getAllPostByUserId(int page, int size, String name) {
         if (page < 0) {
-            throw new BadRequestException(VaraibleName.PAGE_LESS_THAN_ZERO);
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
         User user = getUser(name);
 
@@ -162,7 +162,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PageableResult<PostDtoOut> getAllPostByAdmin(int page, int size) {
         if (page < 0) {
-            throw new BadRequestException(VaraibleName.PAGE_LESS_THAN_ZERO);
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
 
         Page<Posts> posts = this.postRepository.findPostsByAdmin(PageRequest.of(page - 1, size));
@@ -177,7 +177,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PageableResult<PostDtoOut> getMostLikePost(int page, int size) {
         if (page < 0) {
-            throw new BadRequestException(VaraibleName.PAGE_LESS_THAN_ZERO);
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
 
         Page<Posts> posts = this.postRepository.findMostLikePosts(PageRequest.of(page - 1, size));
@@ -191,7 +191,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PageableResult<PostDtoOut> getRecentPost(int page, int size) {
         if (page < 0) {
-            throw new BadRequestException(VaraibleName.PAGE_LESS_THAN_ZERO);
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
 
         Page<Posts> posts = this.postRepository.findRecentPosts(PageRequest.of(page - 1, size));
@@ -205,7 +205,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PageableResult<PostDtoOut> getPostByCategory(int page, int size, String category_name) {
         if (page < 0) {
-            throw new BadRequestException(VaraibleName.PAGE_LESS_THAN_ZERO);
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
         Category category = this.categoryRepository.findByName(category_name).orElseThrow(() -> new ResourceNotFoundException("Category Not Found With The Name :" + category_name));
         Page<Posts> posts = this.postRepository.findByCategoriesIn(category, PageRequest.of(page - 1, size));

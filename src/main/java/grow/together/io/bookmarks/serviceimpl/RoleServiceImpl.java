@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.serviceimpl;
 
-import grow.together.io.bookmarks.common.VaraibleName;
+import grow.together.io.bookmarks.common.VariableName;
 import grow.together.io.bookmarks.domain.Role;
 import grow.together.io.bookmarks.dtomodel.DataResponse;
 import grow.together.io.bookmarks.dtomodel.PageableResult;
@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public PageableResult<RoleDtoOut> getAllRole(int page, int size) {
         if (page < 0) {
-            throw new BadRequestException(VaraibleName.PAGE_LESS_THAN_ZERO);
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
 
         Page<Role> roles = this.roleRepository.findAll(PageRequest.of(page-1, size));

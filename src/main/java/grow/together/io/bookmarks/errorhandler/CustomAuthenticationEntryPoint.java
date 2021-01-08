@@ -18,12 +18,8 @@ import java.io.OutputStream;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private final HttpMessageConverter<String> messageConverter;
-    private final ObjectMapper mapper;
+    public CustomAuthenticationEntryPoint() {
 
-    public CustomAuthenticationEntryPoint(HttpMessageConverter<String> messageConverter, ObjectMapper mapper) {
-        this.messageConverter = messageConverter;
-        this.mapper = mapper;
     }
 
     @Override

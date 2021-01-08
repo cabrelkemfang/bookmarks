@@ -1,7 +1,7 @@
 package grow.together.io.bookmarks.serviceimpl;
 
 
-import grow.together.io.bookmarks.common.VaraibleName;
+import grow.together.io.bookmarks.common.VariableName;
 import grow.together.io.bookmarks.domain.GroupStatus;
 import grow.together.io.bookmarks.domain.Role;
 import grow.together.io.bookmarks.domain.User;
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageableResult<UserDtaoOut> getAllUser(int page, int size) {
         if (page < 0) {
-            throw new BadRequestException(VaraibleName.PAGE_LESS_THAN_ZERO);
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
         Page<User> userPage = this.userRepository.findAll(PageRequest.of(page - 1, size));
         return new PageableResult<>(page,

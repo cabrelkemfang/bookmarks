@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.serviceimpl;
 
-import grow.together.io.bookmarks.common.VaraibleName;
+import grow.together.io.bookmarks.common.VariableName;
 import grow.together.io.bookmarks.domain.SubscriberStatus;
 import grow.together.io.bookmarks.domain.Subscriber;
 import grow.together.io.bookmarks.dtomodel.*;
@@ -41,7 +41,7 @@ public class SubscribersServiceImpl implements SubscriberService {
     public PageableResult<SubscriberDtoOut> getAllSubscribers(int page, int size) {
 
         if (page < 0) {
-            throw new BadRequestException(VaraibleName.PAGE_LESS_THAN_ZERO);
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
 
         Page<Subscriber> subscribers = this.subscribersRepository.findAll(PageRequest.of(page - 1, size));

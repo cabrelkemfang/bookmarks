@@ -5,7 +5,6 @@ import grow.together.io.bookmarks.service.LoginAttempsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -19,10 +18,10 @@ public class TaskSheudeler {
     private final UserRepository userRepository;
 
     @Value("${spring.aouth.max-failled-attempts}")
-    public int maxFailledAttempt;
+    public int maxFailedAttempt;
 
     @Value("${spring.aouth.lock-time}")
-    public int failledTime;
+    public int failedTime;
 
     @Autowired
     public TaskSheudeler(LoginAttempsService loginAttempsService, UserRepository userRepository) {
@@ -37,7 +36,7 @@ public class TaskSheudeler {
 
 //    @Scheduled(cron = "${cron-jop}")
     public void unlockUser() {
-        this.userRepository.getLockUser(failledTime,maxFailledAttempt).stream()
+        this.userRepository.getLockUser(failedTime, maxFailedAttempt).stream()
                 .map(this.loginAttempsService::unlockWhenTimeExpired)
                 .collect(Collectors.toList());
         log.info("Account unlock");
