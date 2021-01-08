@@ -3,7 +3,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       dialect: org.hibernate.dialect.MySQL55Dialect
   datasource:
@@ -20,6 +20,10 @@ spring:
     signingKey: 123
     max-failled-attempts: 5
     lock-time: 1
+
+bookmarks:
+  admin-email: ghislainck7@gmail.com
+  password: BookmarksStore@237
 
 cron-jop: 0 0/1 * 1/1 * ?
 

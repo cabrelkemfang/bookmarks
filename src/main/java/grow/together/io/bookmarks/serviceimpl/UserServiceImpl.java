@@ -5,18 +5,17 @@ import grow.together.io.bookmarks.common.VariableName;
 import grow.together.io.bookmarks.domain.GroupStatus;
 import grow.together.io.bookmarks.domain.Role;
 import grow.together.io.bookmarks.domain.User;
-import grow.together.io.bookmarks.dtomodel.DataResponse;
-import grow.together.io.bookmarks.dtomodel.PageableResult;
-import grow.together.io.bookmarks.dtomodel.UserDtaoIn;
-import grow.together.io.bookmarks.dtomodel.UserDtaoOut;
+import grow.together.io.bookmarks.dtomodel.*;
 import grow.together.io.bookmarks.errorhandler.BadRequestException;
 import grow.together.io.bookmarks.errorhandler.ResourceNotFoundException;
 import grow.together.io.bookmarks.eventlistener.UserRegistrationEvent;
+import grow.together.io.bookmarks.eventlistener.UserStatusEvent;
 import grow.together.io.bookmarks.repository.PostRepository;
 import grow.together.io.bookmarks.repository.RoleRepository;
 import grow.together.io.bookmarks.repository.UserRepository;
 import grow.together.io.bookmarks.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,6 +63,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("Role Not Found with Role Name: " + userDtaoIn.getRole()));
         user.setRole(role);
         this.userRepository.save(user);
+
         eventPublisher.publishEvent(new UserRegistrationEvent(user));
         return new DataResponse<>("User Created Successfully", HttpStatus.CREATED.value());
     }
@@ -78,11 +78,11 @@ public class UserServiceImpl implements UserService {
                 size,
                 userPage.getTotalElements(),
                 userPage.getTotalPages(),
-                userPage.getContent().stream().map(user -> getUserDtaoOut(user, this.postRepository)).collect(Collectors.toList())
+                userPage.getContent().stream().map(user -> getUserDtoOut(user, this.postRepository)).collect(Collectors.toList())
         );
     }
 
-    public static UserDtaoOut getUserDtaoOut(User user, PostRepository postRepository) {
+    public static UserDtaoOut getUserDtoOut(User user, PostRepository postRepository) {
         UserDtaoOut userMapper = new UserDtaoOut();
 
         userMapper.setActive(user.isActive());
@@ -100,17 +100,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public DataResponse<UserDtaoOut> getUserById(Long userId) {
         User user = this.getById(userId);
-        return new DataResponse<>("User Load Successfully", HttpStatus.OK.value(), getUserDtaoOut(user, this.postRepository));
+        return new DataResponse<>("User Load Successfully", HttpStatus.OK.value(), getUserDtoOut(user, this.postRepository));
     }
 
     @Override
-    public DataResponse<Void> updateUserStatus(Long userId, boolean status) {
+    public DataResponse<Void> updateUserStatus(String email, boolean status) {
 
-        User user = this.getById(userId);
+        User user = this.getUser(email);
 
         user.setActive(status);
         this.userRepository.save(user);
 
+        eventPublisher.publishEvent(new UserStatusEvent(user));
         return new DataResponse<>("Status Updated Successfully", HttpStatus.OK.value());
     }
 

@@ -6,6 +6,7 @@ import grow.together.io.bookmarks.service.ReportService;
 import grow.together.io.bookmarks.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,27 +25,32 @@ public class AdminController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/user")
+    @PreAuthorize("hasAuthority('VIEW_USERS')")
     public PageableResult<UserDtaoOut> getAllUser(@RequestParam(required = false, defaultValue = "1") int page,
                                                   @RequestParam(required = false, defaultValue = "10") int size) {
         return this.userService.getAllUser(page, size);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/user/{userId}")
+    @PreAuthorize("hasAuthority('VIEW_USER')")
     public DataResponse<UserDtaoOut> getUserById(@PathVariable long userId) {
         return this.userService.getUserById(userId);
     }
 
-    @PutMapping(path = "/user/{userId}/status/{status}")
-    public DataResponse<Void> updateStatus(@PathVariable Long userId, @PathVariable boolean status) {
-        return this.userService.updateUserStatus(userId, status);
+    @PutMapping(path = "/user/{email}/status/{status}")
+    @PreAuthorize("hasAuthority('UPDATE_USER_STATUS')")
+    public DataResponse<Void> updateStatus(@PathVariable String email, @PathVariable boolean status) {
+        return this.userService.updateUserStatus(email, status);
     }
 
     @GetMapping(path = "/summary-reports")
+    @PreAuthorize("hasAuthority('SUMMARY_REPORTS')")
     public DataResponse<SummaryReport> getSummaryReports() {
         return this.reportService.getSummaryReport();
     }
 
     @GetMapping(path = "/posts")
+    @PreAuthorize("hasAuthority('ADMIN_VIEW_POST')")
     public PageableResult<PostDtoOut> getAllPostByAdmin(@RequestParam(required = false, defaultValue = "1") int page,
                                                         @RequestParam(required = false, defaultValue = "10") int size) {
         return this.postService.getAllPostByAdmin(page, size);
