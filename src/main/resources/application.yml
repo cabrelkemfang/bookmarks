@@ -1,4 +1,3 @@
-
 #Datasource configuration
 spring:
   profiles:
@@ -27,10 +26,26 @@ spring:
     signingKey: 123
     max-failled-attempts: 3
     lock-time: 5
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: test@gmail.com
+    password: test123
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 
 bookmarks:
-  admin-email:
-  password:
+  admin-email: ghislainck7@gmail.com
+  password: BookmarksStore@237
+  ui_base_url:
 
 cron-jop: 0 0 1 * * ?
 

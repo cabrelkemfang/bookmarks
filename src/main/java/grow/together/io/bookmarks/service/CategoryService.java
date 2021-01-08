@@ -17,5 +17,5 @@ public interface CategoryService {
 
     DataResponse<Category> findById(Long catg_id);
 
-    DataResponse<Category> searchCategory(String category);
+    PageableResult<Category> searchCategory(int page, int size, String category);
 }

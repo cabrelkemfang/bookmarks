@@ -20,6 +20,9 @@ spring:
     signingKey: 123
     max-failled-attempts: 5
     lock-time: 1
+  mail:
+    username: ghislainck7@gmail.com
+    password: itijbkrnacnwrndf
 
 bookmarks:
   admin-email: ghislainck7@gmail.com

@@ -54,4 +54,11 @@ public class PostController {
         return this.postService.getPostByCategory(page, size, categName);
     }
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post")
+    public PageableResult<PostDtoOut> searchPost(@RequestParam String title,
+                                                 @RequestParam(required = false, defaultValue = "1") int page,
+                                                 @RequestParam(required = false, defaultValue = "9") int size) {
+        return this.postService.searchPost(page, size, title);
+    }
+
 }

@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.mail.MailParseException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,7 +26,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorValidatorDetail> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException,
-                                                             HttpServletRequest httpServletRequest) {
+                                                                                HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.NOT_FOUND.value());
         errorDetails.setMessage(resourceNotFoundException.getMessage());
@@ -36,7 +37,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorValidatorDetail> handleBadRequestException(BadRequestException badRequestException,
-                                                       HttpServletRequest httpServletRequest) {
+                                                                          HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
         errorDetails.setMessage(badRequestException.getMessage());
@@ -45,10 +46,21 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(MailParseException.class)
+    public ResponseEntity<ErrorValidatorDetail> handleEmailError(MailParseException mailParseException,
+                                                                 HttpServletRequest httpServletRequest) {
+        ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
+        errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetails.setMessage(mailParseException.getMessage());
+        errorDetails.setTitle("Bad Request");
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(CustomOauthException.class)
     public ResponseEntity<ErrorValidatorDetail> oauthException(CustomOauthException badRequestException,
-                                            HttpServletRequest httpServletRequest) {
+                                                               HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorDetails.setMessage(badRequestException.getMessage());
@@ -59,7 +71,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorValidatorDetail> UsernameNotFoundExceptionException(UsernameNotFoundException badRequestException,
-                                            HttpServletRequest httpServletRequest) {
+                                                                                   HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorDetails.setMessage(badRequestException.getMessage());
@@ -69,7 +81,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceExist.class)
     public ResponseEntity<ErrorValidatorDetail> handleResourceExistException(ResourceExist resourceExist,
-                                                          HttpServletRequest httpServletRequest) {
+                                                                             HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
         errorDetails.setMessage(resourceExist.getMessage());
@@ -80,7 +92,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DeleteNotAllowExeption.class)
     public ResponseEntity<ErrorValidatorDetail> handleDeleNotException(DeleteNotAllowExeption deleteNotAllowExeption,
-                                                    HttpServletRequest httpServletRequest) {
+                                                                       HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
         errorDetails.setMessage(deleteNotAllowExeption.getMessage());
