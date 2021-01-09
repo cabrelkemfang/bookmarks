@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorValidatorDetail> handleBadRequestException(BadRequestException badRequestException,
                                                                           HttpServletRequest httpServletRequest) {
@@ -42,6 +45,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
         errorDetails.setMessage(badRequestException.getMessage());
         errorDetails.setTitle("Bad Request");
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({SocketTimeoutException.class, MessagingException.class})
+    public ResponseEntity<ErrorValidatorDetail> socketTimeoutRequestException(Exception e) {
+        ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
+        errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetails.setMessage(e.getMessage());
+        errorDetails.setTitle("Time Out");
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
