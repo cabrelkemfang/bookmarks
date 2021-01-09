@@ -28,16 +28,17 @@ public class EmailEventListener implements ApplicationListener<UserRegistrationE
 
     @Override
     public void onApplicationEvent(UserRegistrationEvent userRegistrationEvent) {
+        log.info("Account Have been Created");
         User user = userRegistrationEvent.getUser();
         String subject = "New Account Created HAve been Created";
         String title = "New Account Creation";
         String content = "A New  Account Have Been Successfully Created On Bookmarks ." +
-                "\n Bellow is the User Information :" +
-                "\n User Name: " + user.getName() +
-                "\n Github Account: " + user.getGithub() +
-                "\n User Email: " + user.getGmail() +
-                "\n User Name: " + user.getName() +
-                "To Access The Admin Dashboard click on the following : " + baseUrl + "/login";
+                "\n <br> Bellow is the User Information :" +
+                "\n <br>&nbsp; &nbsp; -User Name: " + user.getName() +
+                "\n <br>&nbsp; &nbsp; -Github Account: " + user.getGithub() +
+                "\n <br>&nbsp; &nbsp; -User Email: " + user.getGmail() +
+                "\n <br>&nbsp; &nbsp; -User Name: " + user.getName() +
+                "\n <br>To Access The Admin Dashboard click on the following : " + baseUrl + "/login";
 
         String body = EmailTemplate.getEmailTemplate("", content, title);
 

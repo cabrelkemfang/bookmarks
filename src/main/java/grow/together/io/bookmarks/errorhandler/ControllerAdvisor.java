@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.net.SocketTimeoutException;
@@ -59,13 +60,12 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MailParseException.class)
-    public ResponseEntity<ErrorValidatorDetail> handleEmailError(MailParseException mailParseException,
-                                                                 HttpServletRequest httpServletRequest) {
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<ErrorValidatorDetail> handleEmailError(Exception e) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
-        errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorDetails.setMessage(mailParseException.getMessage());
-        errorDetails.setTitle("Bad Request");
+        errorDetails.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorDetails.setMessage("Smtp Username and Password not accepted");
+        errorDetails.setTitle("UNAUTHORIZED");
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }

@@ -87,7 +87,7 @@ public class EmailTemplate {
                 "                  <td class=\"es-m-p0r\" valign=\"top\" align=\"center\" style=\"padding:0;Margin:0;width:530px\"> \n" +
                 "                   <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" role=\"presentation\" style=\"mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px\"> \n" +
                 "                     <tr style=\"border-collapse:collapse\"> \n" +
-                "                      <td align=\"center\" style=\"padding:20px;Margin:0;font-size:0px;border-bottom:1px solid #333333\"><img class=\"adapt-img\" src=\"/home/cfactor/OpenSource/bookmarks/src/main/resources/images/70581610129545659.png\" alt style=\"display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic\" width=\"128\"></td> \n" +
+                "                      <td align=\"center\" style=\"padding:20px;Margin:0;font-size:0px;border-bottom:1px solid #333333\"><img class=\"adapt-img\" src=\"https://i.ibb.co/937KNHR/70581610129545659.png\"  alt style=\"display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic\" width=\"128\"></td> \n" +
                 "                     </tr> \n" +
                 "                   </table></td> \n" +
                 "                 </tr> \n" +
@@ -151,3 +151,5 @@ public class EmailTemplate {
         return template;
     }
 }
+
+

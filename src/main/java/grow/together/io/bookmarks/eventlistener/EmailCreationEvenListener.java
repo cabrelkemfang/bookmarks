@@ -22,11 +22,13 @@ public class EmailCreationEvenListener implements ApplicationListener<UserRegist
 
     @Override
     public void onApplicationEvent(UserRegistrationEvent userRegistrationEvent) {
-
+        log.info("Account Have been Created user"+ userRegistrationEvent.getUser().getGmail());
         String subject = "You Account Have Been Created On Bookmarks";
         User user = userRegistrationEvent.getUser();
         String title = "Account Creation";
-        String content = "You Account Have Been Successfully Created On Bookmarks.\nYou Will be notify when you account will be activated .\nThanks For Confidence And Welcome to Grow Together Family";
+        String content = "You Account Have Been Successfully Created On Bookmarks." +
+                "\n <br>You Will be notify when you account will be activated ." +
+                "\n <br>Thanks For Confidence And Welcome to Grow Together Family";
 
         String body = EmailTemplate.getEmailTemplate(user.getName(), content, title);
 
