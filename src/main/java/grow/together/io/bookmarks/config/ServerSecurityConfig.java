@@ -46,8 +46,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         "/oauth/token",
-                        "/api/v1/bookmarks/oauth/sign-up",
-                        "/api/v1/bookmarks/admin/role"
+                        "/api/bookmarks/v1/oauth/sign-up"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler);
@@ -62,8 +61,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/configuration/security/**",
                 "/swagger-ui.html",
                 "/webjars/**",
-                "/api/v1/bookmarks/oauth/sign-up",
-                "/api/v1/bookmarks/admin/role");
+                "/api/bookmarks/v1/oauth/sign-up");
     }
 
     @Bean

@@ -38,6 +38,12 @@ public interface PostRepository extends JpaRepository<Posts, Long> {
     @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false order by p.link asc")
     Page<Posts> findPosts(Pageable pageable);
 
+    @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false and p.title like %:title% order by p.link asc")
+    Page<Posts> searchPosts(Pageable pageable, @Param("title") String title);
+
+    @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false and p.categories in :category order by p.link asc")
+    Page<Posts> findPostsByCategory(Pageable pageable, Category category);
+
     @Query("select p from Posts p where p.id =:postId and p.user.id =:userId and p.isDeleted=false")
     Optional<Posts> findByPostIdAndUserId(@Param("postId") Long postId, @Param("userId") Long userId);
 

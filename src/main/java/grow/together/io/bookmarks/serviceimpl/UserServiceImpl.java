@@ -27,6 +27,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +52,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public DataResponse<Void> createUser(UserDtaoIn userDtaoIn) {
         User user = new User();
 
@@ -104,6 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public DataResponse<Void> updateUserStatus(String email, boolean status) {
 
         User user = this.getUser(email);

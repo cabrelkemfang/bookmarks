@@ -58,3 +58,6 @@ VALUES (1, 1),
        (1, 22),
        (1, 23),
        (1, 24);
+
+INSERT  INTO hibernate_sequence
+VALUE (10);

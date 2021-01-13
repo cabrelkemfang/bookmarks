@@ -10,6 +10,8 @@ public interface PostService {
 
     PageableResult<PostDtoOut> getAllPost(int page, int size);
 
+    PageableResult<PostDtoOut> searchPost(int page, int size,String title);
+
     DataResponse<Void> createPostByUser(PostDtoIn postDtoIn, String name);
 
     DataResponse<Void> updatePostByUser(Long post_id, PostDtoIn postDtoIn, String name);

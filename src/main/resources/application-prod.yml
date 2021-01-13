@@ -3,20 +3,31 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   datasource:
-    url: mysql://us-cdbr-east-02.cleardb.com:3306/heroku_ca6f3f3322ccb71
-    username: b804e9fa03b474
-    password: 81ca193c
+    url: jdbc:mysql://td5l74lo6615qq42.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/t1fk31jiq2mc9a2a
+    username: h5b4g6dkq0w3gjli
+    password: wtvxfecp1054t32a
+  flyway:
+    enabled: true
+    user: h5b4g6dkq0w3gjli
+    password: wtvxfecp1054t32a
   aouth:
     client_id: bootmarks-client-id
     client_secret: bootmarks-client-secret
     tokenValidity: 9000
     refrechTokenValidity: 9000
-    auth_server: http://localhost:7075/oauth/token
+    auth_server: https://bookmarks-rest-api-v0.herokuapp.com:7075/oauth/token
     resourceIds: resources-api
     signingKey: 123
     max-failled-attempts: 3
     lock-time: 5
+  mail:
+    username: ghislainck7@gmail.com
+    password: itijbkrnacnwrndf
+
+  bookmarks:
+    admin-email: ghislainck7@gmail.com
+    password: BookmarksStore@237
 
 cron-jop: 0 0 1 * * ?

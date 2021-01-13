@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.mail.MailParseException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +29,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorValidatorDetail> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException,
-                                                             HttpServletRequest httpServletRequest) {
+                                                                                HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.NOT_FOUND.value());
         errorDetails.setMessage(resourceNotFoundException.getMessage());
@@ -34,9 +38,10 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorValidatorDetail> handleBadRequestException(BadRequestException badRequestException,
-                                                       HttpServletRequest httpServletRequest) {
+                                                                          HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
         errorDetails.setMessage(badRequestException.getMessage());
@@ -45,10 +50,30 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({SocketTimeoutException.class, MessagingException.class})
+    public ResponseEntity<ErrorValidatorDetail> socketTimeoutRequestException(Exception e) {
+        ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
+        errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetails.setMessage(e.getMessage());
+        errorDetails.setTitle("Time Out");
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<ErrorValidatorDetail> handleEmailError(Exception e) {
+        ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
+        errorDetails.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorDetails.setMessage("Smtp Username and Password not accepted");
+        errorDetails.setTitle("UNAUTHORIZED");
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(CustomOauthException.class)
     public ResponseEntity<ErrorValidatorDetail> oauthException(CustomOauthException badRequestException,
-                                            HttpServletRequest httpServletRequest) {
+                                                               HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorDetails.setMessage(badRequestException.getMessage());
@@ -59,7 +84,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorValidatorDetail> UsernameNotFoundExceptionException(UsernameNotFoundException badRequestException,
-                                            HttpServletRequest httpServletRequest) {
+                                                                                   HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorDetails.setMessage(badRequestException.getMessage());
@@ -69,7 +94,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceExist.class)
     public ResponseEntity<ErrorValidatorDetail> handleResourceExistException(ResourceExist resourceExist,
-                                                          HttpServletRequest httpServletRequest) {
+                                                                             HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
         errorDetails.setMessage(resourceExist.getMessage());
@@ -80,7 +105,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DeleteNotAllowExeption.class)
     public ResponseEntity<ErrorValidatorDetail> handleDeleNotException(DeleteNotAllowExeption deleteNotAllowExeption,
-                                                    HttpServletRequest httpServletRequest) {
+                                                                       HttpServletRequest httpServletRequest) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
         errorDetails.setMessage(deleteNotAllowExeption.getMessage());

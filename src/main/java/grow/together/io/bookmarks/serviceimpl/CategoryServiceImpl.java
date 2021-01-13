@@ -81,9 +81,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public DataResponse<Category> searchCategory(String value) {
-        Category category = this.categoryRepository.searchByName(value);
+    public PageableResult<Category> searchCategory(int page, int size, String value) {
 
-        return new DataResponse<>("Search Result", HttpStatus.OK.value(), category);
+        if (page < 0) {
+            throw new BadRequestException("Page number cannot be less than zero.");
+        }
+
+        Page<Category> categories = this.categoryRepository.searchByName(value, PageRequest.of(page - 1, size));
+
+        return new PageableResult<>(page, size, categories.getTotalElements(), categories.getTotalPages(), categories.getContent());
     }
 }

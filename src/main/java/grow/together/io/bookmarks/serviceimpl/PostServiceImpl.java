@@ -60,6 +60,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public PageableResult<PostDtoOut> searchPost(int page, int size, String title) {
+        if (page < 0) {
+            throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
+        }
+
+        Page<Posts> posts = this.postRepository.searchPosts(PageRequest.of(page - 1, size), title);
+        return new PageableResult<>(page,
+                size,
+                posts.getTotalElements(),
+                posts.getTotalPages(),
+                posts.getContent().stream().map(PostDtoOut::new).collect(Collectors.toList()));
+    }
+
+
+    @Override
     @Transactional
     public DataResponse<Void> createPostByUser(PostDtoIn postDtoIn, String name) {
 
