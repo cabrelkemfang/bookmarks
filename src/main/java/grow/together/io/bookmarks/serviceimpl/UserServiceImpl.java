@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional
+//    @Transactional
     public DataResponse<Void> createUser(UserDtaoIn userDtaoIn) {
         User user = new User();
 
