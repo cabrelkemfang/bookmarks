@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,12 +26,13 @@ public class UserStatusEventListener implements ApplicationListener<UserStatusEv
     }
 
     @Override
+    @Async("bookmarksTaskExecutor")
     public void onApplicationEvent(UserStatusEvent userStatusEvent) {
         if (userStatusEvent.getUser().isActive() && userStatusEvent.getUser().isAccountNonLocked()) {
 
-            String subject = "New Account Created HAve been Activated";
+            String subject = "Your Account Created Have been Activated";
             User user = userStatusEvent.getUser();
-            String title = "New Account Creation";
+            String title = " Account Activation";
             String content = "You Account Have Been Successfully Activated ." +
                     "\nTo Access The Dashboard click on the following : " + baseUrl + "/login";
 

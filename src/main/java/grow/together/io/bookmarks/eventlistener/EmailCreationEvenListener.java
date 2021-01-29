@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +22,7 @@ public class EmailCreationEvenListener implements ApplicationListener<UserRegist
     }
 
     @Override
+    @Async("bookmarksTaskExecutor")
     public void onApplicationEvent(UserRegistrationEvent userRegistrationEvent) {
         String subject = "You Account Have Been Created On Bookmarks";
         User user = userRegistrationEvent.getUser();

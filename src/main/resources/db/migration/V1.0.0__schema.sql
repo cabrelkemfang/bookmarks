@@ -22,6 +22,17 @@ create table if not exists permission
     name             varchar(255) null
 );
 
+create table if not exists meta_data
+(
+    id          bigint       not null
+    primary key,
+    description varchar(255) null,
+    image_link  varchar(255) null,
+    site_name   varchar(255) null,
+    title       varchar(255) null,
+    url         varchar(255) null
+    );
+
 create table if not exists role
 (
     id               bigint   not null
@@ -78,19 +89,15 @@ create table if not exists user
 
 create table if not exists post
 (
-    id               bigint   not null
+    post_id               bigint   not null
         primary key,
     created_at       datetime not null,
     updated_at       datetime not null,
-    author           varchar(255) null,
-    image_link       varchar(255) null,
     is_deleted       bit      not null,
     nbre_like        int null,
-    link             varchar(255) null,
-    read_time        varchar(255) null,
     post_status      varchar(255) null,
-    title            varchar(255) null,
     version          bigint null,
+    meta_data_id     bigint       null,
     nbre_vue         int null,
     user_id          bigint   not null,
     created_by       varchar(255) null,
@@ -104,7 +111,7 @@ create table if not exists post_category
     post_id  bigint not null,
     categ_id bigint not null,
     constraint FKqr4dx4cx1lh4jfjchabytcakl
-        foreign key (post_id) references post (id),
+        foreign key (post_id) references post (post_id),
     constraint FKt30sdj488lwovuidnk99ea4jv
         foreign key (categ_id) references category (id)
 );

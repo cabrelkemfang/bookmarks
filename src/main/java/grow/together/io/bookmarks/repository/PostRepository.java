@@ -17,10 +17,10 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Posts, Long> {
 
-    @Query("select p from Posts p where p.link=:link and p.isDeleted=false")
+    @Query("select p from Posts p where p.metaData.url=:link and p.isDeleted=false")
     Optional<Posts> findByLink(@Param("link") String link);
 
-    @Query("Select COUNT(p.id) from Posts p Where  p.isDeleted = false and p.categories  in (select c from Category c where c.id = :id)")
+    @Query("Select COUNT(p.postId) from Posts p Where  p.isDeleted = false and p.categories  in (select c from Category c where c.id = :id)")
     long categoryCount(@Param("id") Long id);
 
     @Query("select p from Posts p where p.user.id =:userId and p.isDeleted = false")
@@ -35,22 +35,22 @@ public interface PostRepository extends JpaRepository<Posts, Long> {
     @Query("select p from Posts p where p.isDeleted = false order by p.createdAt desc ")
     Page<Posts> findRecentPosts(Pageable pageable);
 
-    @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false order by p.link asc")
+    @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false order by p.metaData.url asc")
     Page<Posts> findPosts(Pageable pageable);
 
-    @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false and p.title like %:title% order by p.link asc")
+    @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false and p.metaData.title like %:title% order by p.metaData.url asc")
     Page<Posts> searchPosts(Pageable pageable, @Param("title") String title);
 
-    @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false and p.categories in :category order by p.link asc")
+    @Query("select p from Posts p where p.status='PUBLIC' and p.isDeleted = false and p.categories in :category order by p.metaData.url asc")
     Page<Posts> findPostsByCategory(Pageable pageable, Category category);
 
-    @Query("select p from Posts p where p.id =:postId and p.user.id =:userId and p.isDeleted=false")
+    @Query("select p from Posts p where p.postId =:postId and p.user.id =:userId and p.isDeleted=false")
     Optional<Posts> findByPostIdAndUserId(@Param("postId") Long postId, @Param("userId") Long userId);
 
-    @Query("select count(p.id) from Posts p where p.user.id=:userId and p.status =:status and p.isDeleted=false ")
+    @Query("select count(p.postId) from Posts p where p.user.id=:userId and p.status =:status and p.isDeleted=false ")
     long countPostByStatus(@Param("userId") Long userId, @Param("status") GroupStatus status);
 
-    @Query("select count(p.id) from  Posts p where p.isDeleted=false")
+    @Query("select count(p.postId) from  Posts p where p.isDeleted=false")
     long countByPost();
 
     @Query("select p from Posts p where p.categories in :category and p.isDeleted=false")

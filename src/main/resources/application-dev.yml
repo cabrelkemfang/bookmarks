@@ -27,6 +27,7 @@ spring:
 bookmarks:
   admin-email: ghislainck7@gmail.com
   password: BookmarksStore@237
+  ui_base_url: http://localhost:4200
 
 cron-jop: 0 0/1 * 1/1 * ?
 

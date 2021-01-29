@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -28,8 +29,8 @@ public class UserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/post")
     @PreAuthorize("hasAuthority('CREATE_POST')")
-    public DataResponse<Void> createPost(@Valid @RequestBody PostDtoIn postDtoIn, Principal principal) {
-        return this.postService.createPostByUser(postDtoIn, principal.getName());
+    public DataResponse<Void> createPost(@Valid @RequestBody PostDtoIn postDtoIn) throws IOException {
+        return this.postService.createPostByUser(postDtoIn);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post")

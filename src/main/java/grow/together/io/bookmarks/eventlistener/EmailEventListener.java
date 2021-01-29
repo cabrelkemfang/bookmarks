@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,9 +28,10 @@ public class EmailEventListener implements ApplicationListener<UserRegistrationE
     }
 
     @Override
+    @Async("bookmarksTaskExecutor")
     public void onApplicationEvent(UserRegistrationEvent userRegistrationEvent) {
         User user = userRegistrationEvent.getUser();
-        String subject = "New Account Created HAve been Created";
+        String subject = "New Account Have been Created";
         String title = "New Account Creation";
         String content = "A New  Account Have Been Successfully Created On Bookmarks ." +
                 "\n <br> Bellow is the User Information :" +

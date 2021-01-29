@@ -5,6 +5,8 @@ import grow.together.io.bookmarks.dtomodel.PageableResult;
 import grow.together.io.bookmarks.dtomodel.PostDtoIn;
 import grow.together.io.bookmarks.dtomodel.PostDtoOut;
 
+import java.io.IOException;
+
 public interface PostService {
     DataResponse<PostDtoOut> getPostById(Long post_id);
 
@@ -12,7 +14,7 @@ public interface PostService {
 
     PageableResult<PostDtoOut> searchPost(int page, int size,String title);
 
-    DataResponse<Void> createPostByUser(PostDtoIn postDtoIn, String name);
+    DataResponse<Void> createPostByUser(PostDtoIn postDtoIn) throws IOException;
 
     DataResponse<Void> updatePostByUser(Long post_id, PostDtoIn postDtoIn, String name);
 

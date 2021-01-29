@@ -36,5 +36,5 @@ public class AuditableModel implements Serializable {
 
     @Column(name = "last_modified_by")
     @LastModifiedBy
-    private String lastModifieBy;
+    private String lastModifiedBy;
 }

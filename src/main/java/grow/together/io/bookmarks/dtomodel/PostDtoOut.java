@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PostDtoOut {
 
-    private long id;
     private String link;
     private List<String> category;
     private int like;
@@ -22,20 +21,18 @@ public class PostDtoOut {
     private int vue;
     private String status;
     private String createdAt;
-    private String author;
     private String imageLink;
-    private String readTime;
+    private String description;
 
     public PostDtoOut(Posts posts) {
-        this.id = posts.getId();
-        this.link = posts.getLink();
+        this.link = posts.getMetaData().getUrl();
         this.category = posts.getCategories().stream().map(Category::getName).collect(Collectors.toList());
         this.like = posts.getLike();
         this.vue = posts.getVue();
-        this.author = posts.getAuthor();
-        this.imageLink = posts.getImageLink();
-        this.readTime = posts.getReadTime();
-        this.title = posts.getTitle();
+        this.imageLink = posts.getMetaData().getImageLink();
+        this.title = posts.getMetaData().getTitle();
+        this.description = posts.getMetaData().getDescription();
         this.status = posts.getStatus().name();
+        this.createdAt= posts.getCreatedAt().toString();
     }
 }

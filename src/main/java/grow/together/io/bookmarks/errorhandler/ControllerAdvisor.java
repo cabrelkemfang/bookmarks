@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mail.MailParseException;
+import org.springframework.mail.MailSendException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,7 +20,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.EOFException;
 import java.net.SocketTimeoutException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +53,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({SocketTimeoutException.class, MessagingException.class})
+    @ExceptionHandler({SocketTimeoutException.class, MessagingException.class, IndexOutOfBoundsException.class, EOFException.class, MailSendException.class})
     public ResponseEntity<ErrorValidatorDetail> socketTimeoutRequestException(Exception e) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -66,6 +69,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         errorDetails.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorDetails.setMessage("Smtp Username and Password not accepted");
         errorDetails.setTitle("UNAUTHORIZED");
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({SQLException.class})
+    public ResponseEntity<ErrorValidatorDetail> sqlHandlerException(SQLException e) {
+        ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
+        errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetails.setMessage(e.getMessage());
+        errorDetails.setTitle("Sql Error");
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
@@ -99,6 +112,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
         errorDetails.setMessage(resourceExist.getMessage());
         errorDetails.setTitle("Resource Already Exist");
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RetryException.class)
+    public ResponseEntity<ErrorValidatorDetail> handleRetryException(RetryException retryException) {
+        ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
+        errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetails.setMessage(retryException.getMessage());
+        errorDetails.setTitle("Retry Exception");
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }

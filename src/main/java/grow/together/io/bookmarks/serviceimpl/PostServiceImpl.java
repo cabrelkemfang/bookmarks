@@ -1,17 +1,18 @@
 package grow.together.io.bookmarks.serviceimpl;
 
+import grow.together.io.bookmarks.common.GetLoginUser;
 import grow.together.io.bookmarks.common.VariableName;
 import grow.together.io.bookmarks.domain.*;
-import grow.together.io.bookmarks.dtomodel.DataResponse;
-import grow.together.io.bookmarks.dtomodel.PageableResult;
-import grow.together.io.bookmarks.dtomodel.PostDtoIn;
-import grow.together.io.bookmarks.dtomodel.PostDtoOut;
+import grow.together.io.bookmarks.dtomodel.*;
 import grow.together.io.bookmarks.errorhandler.BadRequestException;
 import grow.together.io.bookmarks.errorhandler.ResourceNotFoundException;
+import grow.together.io.bookmarks.mapper.MetaDataMapper;
 import grow.together.io.bookmarks.repository.CategoryRepository;
 import grow.together.io.bookmarks.repository.PostRepository;
+import grow.together.io.bookmarks.service.MetaDataService;
 import grow.together.io.bookmarks.service.PostService;
 import grow.together.io.bookmarks.repository.UserRepository;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,12 +30,18 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final MetaDataService metaDataService;
+    private final GetLoginUser getLoginUser;
+    private final MetaDataMapper metaDataMapper;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
+    public PostServiceImpl(PostRepository postRepository, CategoryRepository categoryRepository, UserRepository userRepository, MetaDataService metaDataService, GetLoginUser getLoginUser, MetaDataMapper metaDataMapper) {
         this.postRepository = postRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.metaDataService = metaDataService;
+        this.getLoginUser = getLoginUser;
+        this.metaDataMapper = metaDataMapper;
     }
 
 
@@ -74,27 +82,26 @@ public class PostServiceImpl implements PostService {
     }
 
 
+    @SneakyThrows
     @Override
     @Transactional
-    public DataResponse<Void> createPostByUser(PostDtoIn postDtoIn, String name) {
+    public DataResponse<Void> createPostByUser(PostDtoIn postDtoIn) throws IOException {
 
         Posts posts = new Posts();
-        posts.setLink(postDtoIn.getLink());
         posts.setStatus(GroupStatus.valueOf(postDtoIn.getStatus()));
-        posts.setTitle(postDtoIn.getTitle());
-        posts.setAuthor(postDtoIn.getAuthor());
-        posts.setImageLink(postDtoIn.getImageLink());
-        posts.setReadTime(postDtoIn.getReadTime());
+
+
+        MetaDataDto metaDataDto = this.metaDataService.getMetaData(postDtoIn.getLink());
+
+        posts.setMetaData(this.metaDataMapper.map(metaDataDto));
 
         List<Category> categories = postDtoIn.getCategory().stream()
                 .map(s -> this.categoryRepository.findByName(s).orElseThrow(
                         () -> new ResourceNotFoundException("Category With Name " + postDtoIn.getCategory() + " Not Found")))
                 .collect(Collectors.toList());
 
-        User user = getUser(name);
-
         posts.setCategories(categories);
-        posts.setUser(user);
+        posts.setUser(getUser(this.getLoginUser.userName()));
 
         this.postRepository.save(posts);
 
@@ -109,8 +116,6 @@ public class PostServiceImpl implements PostService {
         Posts posts = this.postRepository.findByPostIdAndUserId(postId, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Post Not Found with id " + postId));
 
         posts.setStatus(GroupStatus.valueOf(postDtoIn.getStatus()));
-        posts.setTitle(postDtoIn.getTitle());
-        posts.setLink(postDtoIn.getLink());
 
         List<Category> categories = postDtoIn.getCategory().stream()
                 .map(s -> this.categoryRepository.findByName(s).orElseThrow(

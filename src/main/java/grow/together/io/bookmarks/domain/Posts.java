@@ -13,22 +13,17 @@ import java.util.List;
 @Entity
 @Table(name = "post")
 @EqualsAndHashCode(callSuper = false)
-public class Posts extends AuditableModel  {
+public class Posts extends AuditableModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "post_id")
+    private Long postId;
 
-    private String link;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "meta_data_id", referencedColumnName = "id")
+    private MetaData metaData;
 
-    private String title;
-
-    private  String author;
-
-    private String imageLink;
-
-    private String readTime;
-
-    @Column(name ="nbre_like")
+    @Column(name = "nbre_like")
     private int like;
 
     @Column(name = "nbre_vue")
@@ -48,9 +43,9 @@ public class Posts extends AuditableModel  {
             joinColumns = {@JoinColumn(name = "post_id")},
             inverseJoinColumns = {@JoinColumn(name = "categ_id")}
     )
-    private List<Category> categories ;
+    private List<Category> categories;
 
-    @ManyToOne(optional = false,fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

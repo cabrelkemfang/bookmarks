@@ -15,16 +15,10 @@ public class PostDtoIn {
     @NotEmpty(message = "Please provide the link")
     @UniquePostLink
     private String link;
-    @NotEmpty(message = "Please Provide a Tile")
-    private String title;
 
-    private  String author;
-
-    private String imageLink;
-
-    private String readTime;
     @NotEmpty(message = "Please provide the category")
     private List<String> category;
+
     @NotEmpty(message = "Please provide the Status")
     private String status;
 }

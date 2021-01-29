@@ -30,6 +30,7 @@ VALUES
 (23, 'Delete A Category', 'DELETE_CATEGORY'),
 (24, 'Update A Category', 'UPDATE_CATEGORY');
 
+
 INSERT INTO role
     VALUE (1, current_timestamp, current_timestamp, FALSE, "role_admin", 'SYSTEM_USER', 'SYSTEM_USER');
 
