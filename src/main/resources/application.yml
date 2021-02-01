@@ -48,5 +48,5 @@ bookmarks:
   ui_base_url: https://i.ibb.co/937KNHR/70581610129545659.png
   icon_link: https://i.ibb.co/937KNHR/70581610129545659.png
 
-cron-jop: 0 0 1 * * ?
+cron-jop: 0 0/1 * 1/1 * ?
 

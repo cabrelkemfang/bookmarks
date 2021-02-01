@@ -20,7 +20,7 @@ spring:
     auth_server: https://bookmarks-rest-api-v0.herokuapp.com:7075/oauth/token
     resourceIds: resources-api
     signingKey: 123
-    max-failled-attempts: 3
+    max-failled-attempts: 5
     lock-time: 5
   mail:
     username: ghislainck7@gmail.com
@@ -29,5 +29,5 @@ spring:
   bookmarks:
     admin-email: ghislainck7@gmail.com
     password: BookmarksStore@237
+    ui_base_url: http://localhost:4200
 
-cron-jop: 0 0 1 * * ?
