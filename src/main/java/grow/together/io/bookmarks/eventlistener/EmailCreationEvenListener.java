@@ -24,6 +24,8 @@ public class EmailCreationEvenListener implements ApplicationListener<UserRegist
     @Override
     @Async("bookmarksTaskExecutor")
     public void onApplicationEvent(UserRegistrationEvent userRegistrationEvent) {
+        log.info("-------------------------------User Registration Event------------------------------------------------------------------------");
+
         String subject = "You Account Have Been Created On Bookmarks";
         User user = userRegistrationEvent.getUser();
         String title = "Account Creation";
@@ -33,6 +35,6 @@ public class EmailCreationEvenListener implements ApplicationListener<UserRegist
 
         String body = EmailTemplate.getEmailTemplate(user.getName(), content, title);
 
-        this.emailService.sendTextEmail(body, subject, user.getGmail());
+        this.emailService.sendTextEmail(body, subject, user.getEmail());
     }
 }

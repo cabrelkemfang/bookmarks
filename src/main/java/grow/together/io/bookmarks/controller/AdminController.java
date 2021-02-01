@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/bookmarks/v1/admin")
 public class AdminController {
@@ -22,6 +24,13 @@ public class AdminController {
         this.postService = postService;
         this.userService = userService;
         this.reportService = reportService;
+    }
+
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('CREATE_ADMIN')")
+    public DataResponse<Void> createAdmin(@Valid @RequestBody UserDtaoIn userDtaoIn) {
+        return this.userService.createAdminUser(userDtaoIn);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/user")

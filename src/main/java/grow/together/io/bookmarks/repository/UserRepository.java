@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select count(u.id) from User u where u.isDelete=false and u.role.name =:role")
     long countByRole(@Param("role") String role);
 
-    @Query("select u from User u where u.gmail =:email and u.isDelete=false ")
+    @Query("select u from User u where u.email =:email and u.isDelete=false ")
     Optional<User> findByEmail(@Param("email") String email);
 
     @Query("select u from User u where u.github =:github and u.isDelete=false ")
@@ -33,12 +33,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select count (u.id) from User u where u.isDelete=false  and u.active=true")
     long countByUsers();
 
-    Optional<User> findByGmail(String email);
-
-    @Query("UPDATE User u SET u.failedAttempt = :failAttempts WHERE u.gmail = :email")
+    @Query("UPDATE User u SET u.failedAttempt = :failAttempts WHERE u.email = :email")
     @Modifying
-    public void updateFailedAttempts(@Param("failAttempts") int failAttempts, @Param("email") String email);
+    void updateFailedAttempts(@Param("failAttempts") int failAttempts, @Param("email") String email);
 
-    @Query(value = "Select * From user u Where u.failed_attempt = :failedAttempt and TIMESTAMPDIFF(MINUTE, u.lock_time, NOW()) >= :duration", nativeQuery = true)
-    List<User> getLockUser(@Param("failedAttempt") int failedAttempt, @Param("duration") int duration);
+    @Query(value = "Select * from user u where u.failed_attempt = :failedAttempt and TIMESTAMPDIFF(MINUTE, u.lock_time, NOW()) >= :duration", nativeQuery = true)
+    List<User> getLockUser(int failedAttempt,  int duration);
 }

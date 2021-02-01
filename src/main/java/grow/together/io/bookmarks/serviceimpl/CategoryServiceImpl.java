@@ -49,19 +49,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public DataResponse<Void> update(Long catgId, CategoryDtoIn categoryDtoIn) {
-
-        // check if category with id catgId exist
-        Category category = this.categoryRepository.findById(catgId).orElseThrow(
-                () -> new ResourceNotFoundException("Category With id :" + catgId + " Not Found"));
-
-        category.setName(categoryDtoIn.getName());
-        this.categoryRepository.save(category);
-
-        return new DataResponse<>("Category Successfully Updated", HttpStatus.CREATED.value());
-    }
-
-    @Override
     public DataResponse<Void> delete(Long catgId) throws DeleteNotAllowExeption {
         long count = this.postRepository.categoryCount(catgId);
         if (count != 0) {

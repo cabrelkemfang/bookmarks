@@ -18,7 +18,7 @@ import javax.validation.constraints.NotEmpty;
 public class UserDtaoIn {
     @NotEmpty(message = "Please Provide The Email")
     @Email(message = "Email Is Not Valid")
-    private String gmail;
+    private String email;
 
     @NotEmpty(message = "Please Provide You GitHub")
     @UniqueGithub
@@ -32,8 +32,4 @@ public class UserDtaoIn {
 
     @NotEmpty(message = "Please Provide You Name")
     private String name;
-
-    @NotEmpty(message = "Please Provide a Role")
-    private String role;
-
 }

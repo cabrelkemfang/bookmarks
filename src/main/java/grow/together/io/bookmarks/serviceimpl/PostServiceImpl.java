@@ -110,29 +110,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public DataResponse<Void> updatePostByUser(Long postId, PostDtoIn postDtoIn, String name) {
-        User user = getUser(name);
-
-        Posts posts = this.postRepository.findByPostIdAndUserId(postId, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Post Not Found with id " + postId));
-
-        posts.setStatus(GroupStatus.valueOf(postDtoIn.getStatus()));
-
-        List<Category> categories = postDtoIn.getCategory().stream()
-                .map(s -> this.categoryRepository.findByName(s).orElseThrow(
-                        () -> new ResourceNotFoundException("Category With Name " + postDtoIn.getCategory() + " Not Found")))
-                .collect(Collectors.toList());
-
-        posts.setCategories(categories);
-
-        this.postRepository.save(posts);
-
-        return new DataResponse<>("Post Updated Successfully ", HttpStatus.CREATED.value());
-    }
-
-    @Override
-    @Transactional
-    public DataResponse<Void> deletePostByUser(Long postId, String name) {
-        User user = getUser(name);
+    public DataResponse<Void> deletePostByUser(Long postId) {
+        User user = getUser(this.getLoginUser.userName());
 
         Posts posts = this.postRepository.findByPostIdAndUserId(postId, user.getId()).orElseThrow(() -> new ResourceNotFoundException("Post Not Found with id " + postId));
         posts.setDeleted(true);
@@ -141,11 +120,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PageableResult<PostDtoOut> getAllPostByUserId(int page, int size, String name) {
+    public PageableResult<PostDtoOut> getAllPostByUserId(int page, int size) {
         if (page < 0) {
             throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
-        User user = getUser(name);
+        User user = getUser(this.getLoginUser.userName());
 
         Page<Posts> posts = this.postRepository.findPostsByUserId(user.getId(), PageRequest.of(page - 1, size));
         return new PageableResult<>(page,
@@ -156,8 +135,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long postId, String name) {
-        User user = getUser(name);
+    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long postId) {
+        User user = getUser(this.getLoginUser.userName());
         Posts post = this.postRepository.findByPostIdAndUserId(postId, user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("No result Found For Post Id :" + postId + " And User Id " + user.getId()));
 

@@ -28,7 +28,7 @@ public class UserStatusEventListener implements ApplicationListener<UserStatusEv
     @Override
     @Async("bookmarksTaskExecutor")
     public void onApplicationEvent(UserStatusEvent userStatusEvent) {
-        if (userStatusEvent.getUser().isActive() && userStatusEvent.getUser().isAccountNonLocked()) {
+        log.info("-------------------------------User Status Event------------------------------------------------------------------------");
 
             String subject = "Your Account Created Have been Activated";
             User user = userStatusEvent.getUser();
@@ -38,10 +38,7 @@ public class UserStatusEventListener implements ApplicationListener<UserStatusEv
 
             String body = EmailTemplate.getEmailTemplate(user.getName(), content, title);
 
-            this.emailService.sendTextEmail(body, subject, user.getGmail());
+            this.emailService.sendTextEmail(body, subject, user.getEmail());
 
-        } else if (!userStatusEvent.getUser().isAccountNonLocked() && userStatusEvent.getUser().isActive()) {
-            //Send a mail to user to inform that the account have been Lock Due To Failed_attempts;
-        }
     }
 }

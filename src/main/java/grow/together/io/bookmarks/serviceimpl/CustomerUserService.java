@@ -49,7 +49,7 @@ public class CustomerUserService implements UserDetailsService {
             throw new UsernameNotFoundException("UserName is Not Longer Part Of The System The account Have Been Delete");
         }
         return new org.springframework.security.core.userdetails.User(
-                userInfo.get().getGmail(), userInfo.get().getPassword(), userInfo.get().isActive(), true, true,
+                userInfo.get().getEmail(), userInfo.get().getPassword(), userInfo.get().isActive(), true, true,
                 userInfo.get().isAccountNonLocked(), getAuthorities(userInfo.get().getRole()));
     }
 

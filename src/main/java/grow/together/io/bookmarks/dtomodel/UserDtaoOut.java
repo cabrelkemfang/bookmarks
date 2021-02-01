@@ -8,20 +8,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDtaoOut {
-    private String gmail;
-
+    private String email;
     private String github;
-
     private String name;
-
     private boolean active;
-
     private long privatePost;
-
     private long publicPost;
-
     private String createdAt;
-
-    private boolean isDelete;
-
+    private String roleName;
 }

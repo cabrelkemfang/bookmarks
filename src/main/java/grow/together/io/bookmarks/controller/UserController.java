@@ -36,33 +36,26 @@ public class UserController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post")
     @PreAuthorize("hasAuthority('VIEW_USER_POST')")
     public PageableResult<PostDtoOut> getPostByUserId(@RequestParam(required = false, defaultValue = "1") int page,
-                                                      @RequestParam(required = false, defaultValue = "9") int size, Principal principal) {
-        return this.postService.getAllPostByUserId(page, size, principal.getName());
+                                                      @RequestParam(required = false, defaultValue = "9") int size) {
+        return this.postService.getAllPostByUserId(page, size);
     }
 
     @GetMapping(path = "post/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('VIEW_POST')")
-    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(@PathVariable Long postId, Principal principal) {
-        return this.postService.getPostByUserIdAndPostId(postId, principal.getName());
+    public DataResponse<PostDtoOut> getPostByUserIdAndPostId(@PathVariable Long postId) {
+        return this.postService.getPostByUserIdAndPostId(postId);
     }
 
     @PostMapping(path = "/post/{postId}")
     @PreAuthorize("hasAuthority('DELETE_POST')")
-    public DataResponse<Void> deletePost(@PathVariable Long postId, Principal principal) {
-        return this.postService.deletePostByUser(postId, principal.getName());
+    public DataResponse<Void> deletePost(@PathVariable Long postId) {
+        return this.postService.deletePostByUser(postId);
     }
 
     @PutMapping()
-    @PreAuthorize("hasAuthority('UPDATE_POST')")
+    @PreAuthorize("hasAuthority('UPDATE_USER')")
     public DataResponse<Void> updateUser(@Valid @RequestBody UserDtaoIn userDtaoIn, Principal principal) {
         return this.userService.updateUser(userDtaoIn, principal.getName());
-    }
-
-
-    @PutMapping(path = "/post/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('UPDATE_POST')")
-    public DataResponse<Void> updatePost(@PathVariable Long postId, @Valid @RequestBody PostDtoIn postDtoIn, Principal principal) {
-        return this.postService.updatePostByUser(postId, postDtoIn, principal.getName());
     }
 
     @GetMapping(path = "/{userId}/reports")

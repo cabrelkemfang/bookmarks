@@ -22,6 +22,8 @@ public class AuthenticationSuccessEventListener {
     @EventListener({AuthenticationSuccessEvent.class, InteractiveAuthenticationSuccessEvent.class})
     public void onAuthenticationSuccess(AuthenticationSuccessEvent event) {
 
+        log.info("-------------------------------Authentication Success Event------------------------------------------------------------------------");
+
 //        WebAuthenticationDetails auth = (WebAuthenticationDetails) event.getAuthentication().getDetails();
 ////        // Actualizamos la útltima fecha de acceso
 //        Authentication authentication = event.getAuthentication();

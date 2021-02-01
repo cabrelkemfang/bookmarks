@@ -15,7 +15,6 @@ import grow.together.io.bookmarks.repository.RoleRepository;
 import grow.together.io.bookmarks.repository.UserRepository;
 import grow.together.io.bookmarks.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,20 +53,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public DataResponse<Void> createUser(UserDtaoIn userDtaoIn) {
-        User user = new User();
-
-        user.setGithub(userDtaoIn.getGithub());
-        user.setGmail(userDtaoIn.getGmail());
-        user.setName(userDtaoIn.getName());
-        //Password will be encoded later
-        user.setPassword(passwordEncoder.encode(userDtaoIn.getPassword()));
-        Role role = this.roleRepository.findByName(userDtaoIn.getRole())
-                .orElseThrow(() -> new ResourceNotFoundException("Role Not Found with Role Name: " + userDtaoIn.getRole()));
-        user.setRole(role);
+        User user = userMapper(userDtaoIn, "role_user");
         this.userRepository.save(user);
 
         eventPublisher.publishEvent(new UserRegistrationEvent(user));
         return new DataResponse<>("User Created Successfully", HttpStatus.CREATED.value());
+    }
+
+    @Override
+    public DataResponse<Void> createAdminUser(UserDtaoIn userDtaoIn) {
+        User user = userMapper(userDtaoIn, "role_admin");
+        this.userRepository.save(user);
+
+        eventPublisher.publishEvent(new UserRegistrationEvent(user));
+        return new DataResponse<>("User Admin Created Successfully", HttpStatus.CREATED.value());
     }
 
     @Override
@@ -83,22 +82,6 @@ public class UserServiceImpl implements UserService {
                 userPage.getContent().stream().map(user -> getUserDtoOut(user, this.postRepository)).collect(Collectors.toList())
         );
     }
-
-    public static UserDtaoOut getUserDtoOut(User user, PostRepository postRepository) {
-        UserDtaoOut userMapper = new UserDtaoOut();
-
-        userMapper.setActive(user.isActive());
-        userMapper.setGithub(user.getGithub());
-        userMapper.setGmail(user.getGmail());
-        userMapper.setName(user.getName());
-        userMapper.setDelete(user.isDelete());
-        userMapper.setPublicPost(postRepository.countPostByStatus(user.getId(), GroupStatus.PUBLIC));
-        userMapper.setPrivatePost(postRepository.countPostByStatus(user.getId(), GroupStatus.PRIVATE));
-        userMapper.setCreatedAt(user.getCreatedAt().toString());
-
-        return userMapper;
-    }
-
     @Override
     public DataResponse<UserDtaoOut> getUserById(Long userId) {
         User user = this.getById(userId);
@@ -122,7 +105,7 @@ public class UserServiceImpl implements UserService {
     public DataResponse<Void> updateUser(UserDtaoIn userDtaoIn, String name) {
         User user = getUser(name);
 
-        this.userRepository.save(userMapper(user, userDtaoIn, roleRepository));
+        this.userRepository.save(userMapper(user, userDtaoIn));
 
         return new DataResponse<>("User Updated Successfully", HttpStatus.OK.value());
     }
@@ -144,25 +127,51 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public User getById(Long userId) {
+    private User getById(Long userId) {
         return this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No User Found With Id :" + userId));
     }
 
 
-    User getUser(String email) {
+    private  User getUser(String email) {
         return this.userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User Not Found With User Email " + email));
     }
 
 
-    public static User userMapper(User user, UserDtaoIn userDtaoIn, RoleRepository roleRepository) {
+    private static User userMapper(User user, UserDtaoIn userDtaoIn) {
 
         user.setGithub(userDtaoIn.getGithub());
-        user.setGmail(userDtaoIn.getGmail());
+        user.setEmail(userDtaoIn.getEmail());
         user.setName(userDtaoIn.getName());
-        Role role = roleRepository.findByName(userDtaoIn.getRole())
-                .orElseThrow(() -> new ResourceNotFoundException("Role Not Found with Role Name: " + userDtaoIn.getRole()));
+
+        return user;
+    }
+
+    private User userMapper(UserDtaoIn userDtaoIn, String roleName) {
+        User user = new User();
+
+        user.setGithub(userDtaoIn.getGithub());
+        user.setEmail(userDtaoIn.getEmail());
+        user.setName(userDtaoIn.getName());
+        user.setPassword(passwordEncoder.encode(userDtaoIn.getPassword()));
+        Role role = this.roleRepository.findByName(roleName)
+                .orElseThrow(() -> new ResourceNotFoundException("Role Not Found with Role Name: " + roleName));
         user.setRole(role);
 
         return user;
+    }
+
+    private static UserDtaoOut getUserDtoOut(User user, PostRepository postRepository) {
+        UserDtaoOut userMapper = new UserDtaoOut();
+
+        userMapper.setActive(user.isActive());
+        userMapper.setGithub(user.getGithub());
+        userMapper.setEmail(user.getEmail());
+        userMapper.setName(user.getName());
+        userMapper.setRoleName(user.getRole().getName());
+        userMapper.setPublicPost(postRepository.countPostByStatus(user.getId(), GroupStatus.PUBLIC));
+        userMapper.setPrivatePost(postRepository.countPostByStatus(user.getId(), GroupStatus.PRIVATE));
+        userMapper.setCreatedAt(user.getCreatedAt().toString());
+
+        return userMapper;
     }
 }

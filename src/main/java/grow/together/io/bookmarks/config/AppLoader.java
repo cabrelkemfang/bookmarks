@@ -37,7 +37,7 @@ public class AppLoader implements CommandLineRunner {
         Optional<User> user = this.userRepository.findByEmail(adminEmail);
         if (!user.isPresent()) {
             log.info("Create A Default User Of The System");
-            this.userService.createUser(new UserDtaoIn(adminEmail, "test", adminPassword, adminPassword, "Admin User", "role_admin"));
+            this.userService.createAdminUser(new UserDtaoIn(adminEmail, "test", adminPassword, adminPassword, "Admin User"));
             log.info("Activate The Admin User");
             this.userService.updateUserStatus(adminEmail, true);
         }

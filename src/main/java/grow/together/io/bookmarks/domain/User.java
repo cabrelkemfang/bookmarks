@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -20,7 +21,7 @@ public class User extends AuditableModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String gmail;
+    private String email;
 
     private String github;
 
@@ -39,7 +40,7 @@ public class User extends AuditableModel {
     private int failedAttempt=0;
 
     @Column(name = "lock_time")
-    private Date lockTime;
+    private LocalDateTime lockTime;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

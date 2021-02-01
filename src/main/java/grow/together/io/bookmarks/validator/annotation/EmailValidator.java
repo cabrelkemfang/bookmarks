@@ -31,7 +31,7 @@ public class EmailValidator implements ConstraintValidator<UniqueEmail, Object> 
         }
 
         if (o instanceof UserDtaoIn) {
-            Optional<User> user = this.userRepository.findByEmail(((UserDtaoIn) o).getGmail());
+            Optional<User> user = this.userRepository.findByEmail(((UserDtaoIn) o).getEmail());
             return !user.isPresent();
         }
 

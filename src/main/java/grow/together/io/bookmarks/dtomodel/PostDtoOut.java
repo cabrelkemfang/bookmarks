@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,6 @@ public class PostDtoOut {
         this.title = posts.getMetaData().getTitle();
         this.description = posts.getMetaData().getDescription();
         this.status = posts.getStatus().name();
-        this.createdAt= posts.getCreatedAt().toString();
+        this.createdAt= posts.getCreatedAt().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
     }
 }

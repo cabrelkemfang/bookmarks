@@ -1,12 +1,15 @@
 package grow.together.io.bookmarks.sheudeler;
 
+import grow.together.io.bookmarks.domain.User;
 import grow.together.io.bookmarks.repository.UserRepository;
 import grow.together.io.bookmarks.service.LoginAttempsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -21,7 +24,7 @@ public class TaskSheudeler {
     public int maxFailedAttempt;
 
     @Value("${spring.aouth.lock-time}")
-    public int failedTime;
+    public int onLockTime;
 
     @Autowired
     public TaskSheudeler(LoginAttempsService loginAttempsService, UserRepository userRepository) {
@@ -34,12 +37,11 @@ public class TaskSheudeler {
         log.info("ok it is working");
     }
 
-//    @Scheduled(cron = "${cron-jop}")
+    @Scheduled(cron = "${cron-jop}")
     public void unlockUser() {
-        this.userRepository.getLockUser(failedTime, maxFailedAttempt).stream()
+        this.userRepository.getLockUser(maxFailedAttempt,onLockTime).stream()
                 .map(this.loginAttempsService::unlockWhenTimeExpired)
                 .collect(Collectors.toList());
-        log.info("Account unlock");
     }
 }
 

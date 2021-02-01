@@ -59,24 +59,4 @@ public class emailServiceImpl implements EmailService {
         return new DataResponse<>("Email Sent Successfully", HttpStatus.OK.value());
     }
 
-//    private Response sendEmail(String toM, String subjectM, Content content) throws IOException {
-//        Email from = new Email(adminEmail);
-//        String subject = subjectM;
-//        Email to = new Email(toM);
-//        Mail mail = new Mail(from, subject, to, content);
-//
-//        Request request = new Request();
-//        try {
-//            request.setMethod(Method.POST);
-//            request.setEndpoint("mail/send");
-//            request.setBody(mail.build());
-//            Response response = this.sendGridClient.api(request);
-//            log.info("Status: " + response.getStatusCode() + " Body: "
-//                    + response.getBody() + " Headers: " + response.getHeaders());
-//            return response;
-//        } catch (IOException ex) {
-//            log.error("Erroring mail: " + ex.getMessage());
-//            throw ex;
-//        }
-//    }
 }

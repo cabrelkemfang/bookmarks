@@ -13,12 +13,12 @@ spring:
   aouth:
     client_id: bootmarks-client-id
     client_secret: bootmarks-client-secret
-    tokenValidity: 9000
-    refrechTokenValidity: 9000
+    tokenValidity: 9
+    refrechTokenValidity: 9
     auth_server: http://localhost:7075/oauth/token
     resourceIds: resources-api
     signingKey: 123
-    max-failled-attempts: 5
+    max-failled-attempts: 2
     lock-time: 1
   mail:
     username: ghislainck7@gmail.com

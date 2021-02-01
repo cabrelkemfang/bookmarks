@@ -28,11 +28,13 @@ VALUES
 (21, 'View a Specific Category', 'VIEW_CATEGORY'),
 (22, 'Create A Category', 'CREATE_CATEGORY'),
 (23, 'Delete A Category', 'DELETE_CATEGORY'),
-(24, 'Update A Category', 'UPDATE_CATEGORY');
+(24, 'Update A Category', 'UPDATE_CATEGORY'),
+(25, 'Create Admin User', 'CREATE_ADMIN');
 
 
 INSERT INTO role
-    VALUE (1, current_timestamp, current_timestamp, FALSE, "role_admin", 'SYSTEM_USER', 'SYSTEM_USER');
+    VALUES (1, current_timestamp, current_timestamp, FALSE, "role_admin", 'SYSTEM_USER', 'SYSTEM_USER'),
+    (2, current_timestamp, current_timestamp, FALSE, "role_user", 'SYSTEM_USER', 'SYSTEM_USER');
 
 INSERT INTO role_permission
 VALUES (1, 1),
@@ -58,7 +60,15 @@ VALUES (1, 1),
        (1, 21),
        (1, 22),
        (1, 23),
-       (1, 24);
+       (1, 24),
+       (1, 25),
+       (2, 13),
+       (2, 14),
+       (2, 15),
+       (2, 16),
+       (2, 17),
+       (2, 18),
+       (2, 19);
 
 INSERT  INTO hibernate_sequence
 VALUE (10);

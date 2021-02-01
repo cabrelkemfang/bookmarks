@@ -37,7 +37,7 @@ public class EmailEventListener implements ApplicationListener<UserRegistrationE
                 "\n <br> Bellow is the User Information :" +
                 "\n <br>&nbsp; &nbsp; -User Name: " + user.getName() +
                 "\n <br>&nbsp; &nbsp; -Github Account: " + user.getGithub() +
-                "\n <br>&nbsp; &nbsp; -User Email: " + user.getGmail() +
+                "\n <br>&nbsp; &nbsp; -User Email: " + user.getEmail() +
                 "\n <br>&nbsp; &nbsp; -User Name: " + user.getName() +
                 "\n <br>To Access The Admin Dashboard click on the following : " + baseUrl + "/login";
 

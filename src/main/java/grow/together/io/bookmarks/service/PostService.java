@@ -16,13 +16,11 @@ public interface PostService {
 
     DataResponse<Void> createPostByUser(PostDtoIn postDtoIn) throws IOException;
 
-    DataResponse<Void> updatePostByUser(Long post_id, PostDtoIn postDtoIn, String name);
+    DataResponse<Void> deletePostByUser(Long post_id);
 
-    DataResponse<Void> deletePostByUser(Long post_id, String name);
+    PageableResult<PostDtoOut> getAllPostByUserId(int page, int size);
 
-    PageableResult<PostDtoOut> getAllPostByUserId(int page, int size, String name);
-
-    DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long post_id, String name);
+    DataResponse<PostDtoOut> getPostByUserIdAndPostId(Long post_id);
 
     DataResponse<Void> updateVueOrLike(Long id, String status);
 

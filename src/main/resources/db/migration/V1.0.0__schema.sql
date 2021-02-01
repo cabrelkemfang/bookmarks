@@ -75,7 +75,7 @@ create table if not exists user
     active             bit      not null,
     failed_attempt     int null,
     github             varchar(255) null,
-    gmail              varchar(255) null,
+    email              varchar(255) null,
     is_delete          bit      not null,
     lock_time          datetime null,
     name               varchar(255) null,
