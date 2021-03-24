@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserSummaryReport {
-    private long totalPrivatePosts;
-    private long totalPublicPosts;
+    private long totalPrivateBookmarks;
+    private long totalPublicBookmarks;
 }

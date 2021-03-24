@@ -30,15 +30,15 @@ public class UserStatusEventListener implements ApplicationListener<UserStatusEv
     public void onApplicationEvent(UserStatusEvent userStatusEvent) {
         log.info("-------------------------------User Status Event------------------------------------------------------------------------");
 
-            String subject = "Your Account Created Have been Activated";
-            User user = userStatusEvent.getUser();
-            String title = " Account Activation";
-            String content = "You Account Have Been Successfully Activated ." +
-                    "\nTo Access The Dashboard click on the following : " + baseUrl + "/login";
+        String subject = "Your Account Created Have been Activated";
+        User user = userStatusEvent.getUser();
+        String title = " Account Activation";
+        String content = "You Account Have Been Successfully Activated ." +
+                "\nTo Access The Dashboard click on the following : " + baseUrl + "/login";
 
-            String body = EmailTemplate.getEmailTemplate(user.getName(), content, title);
+        String body = EmailTemplate.getEmailTemplate(user.getName(), content, title);
 
-            this.emailService.sendTextEmail(body, subject, user.getEmail());
+        this.emailService.sendTextEmail(body, subject, user.getEmail());
 
     }
 }

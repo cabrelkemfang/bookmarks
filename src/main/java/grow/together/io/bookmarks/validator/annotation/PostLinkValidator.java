@@ -1,7 +1,7 @@
 package grow.together.io.bookmarks.validator.annotation;
 
-import grow.together.io.bookmarks.domain.Posts;
-import grow.together.io.bookmarks.repository.PostRepository;
+import grow.together.io.bookmarks.domain.Bookmarks;
+import grow.together.io.bookmarks.repository.BookmarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
@@ -10,16 +10,16 @@ import java.util.Optional;
 
 public class PostLinkValidator implements ConstraintValidator<UniquePostLink, String> {
 
-    private final PostRepository postRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @Autowired
-    public PostLinkValidator(PostRepository postRepository) {
-        this.postRepository = postRepository;
+    public PostLinkValidator(BookmarkRepository bookmarkRepository) {
+        this.bookmarkRepository = bookmarkRepository;
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        Optional<Posts> posts = this.postRepository.findByLink(value);
+        Optional<Bookmarks> posts = this.bookmarkRepository.findByLink(value);
         return !posts.isPresent();
     }
 }

@@ -17,9 +17,9 @@ public class RoleDtoOut {
     private String name;
     private List<String> permissions;
 
-    public RoleDtoOut(Role role){
+    public RoleDtoOut(Role role) {
         this.id = role.getId();
-        this.name=role.getName();
-        this.permissions= role.getPermissions().stream().map(Permission::getName).collect(Collectors.toList());
+        this.name = role.getName();
+        this.permissions = role.getPermissions().stream().map(Permission::getName).collect(Collectors.toList());
     }
 }

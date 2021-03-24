@@ -23,18 +23,20 @@ VALUES
 (17, 'Update Post ', 'UPDATE_POST'),
 (18, 'Get Summary Post Reports ', 'SUMMARY_POST_REPORTS'),
 (19, 'View All Post By Amin Either Private Or Public ', 'ADMIN_VIEW_POST'),
+(20, 'View All Post By Amin Either Private Or Public ', 'SEARCH_POST'),
 -- Category Permission
-(20, 'View All Categories', 'VIEW_CATEGORIES'),
-(21, 'View a Specific Category', 'VIEW_CATEGORY'),
-(22, 'Create A Category', 'CREATE_CATEGORY'),
-(23, 'Delete A Category', 'DELETE_CATEGORY'),
-(24, 'Update A Category', 'UPDATE_CATEGORY'),
-(25, 'Create Admin User', 'CREATE_ADMIN');
+(21, 'View All Categories', 'VIEW_CATEGORIES'),
+(22, 'View a Specific Category', 'VIEW_CATEGORY'),
+(23, 'Create A Category', 'CREATE_CATEGORY'),
+(24, 'Delete A Category', 'DELETE_CATEGORY'),
+(25, 'Update A Category', 'UPDATE_CATEGORY'),
+(26, 'Search A Category', 'SEARCH_CATEGORY'),
+(27, 'Create Admin User', 'CREATE_ADMIN');
 
 
 INSERT INTO role
-    VALUES (1, current_timestamp, current_timestamp, FALSE, "role_admin", 'SYSTEM_USER', 'SYSTEM_USER'),
-    (2, current_timestamp, current_timestamp, FALSE, "role_user", 'SYSTEM_USER', 'SYSTEM_USER');
+VALUES (1, current_timestamp, current_timestamp, FALSE, "role_admin", 'SYSTEM_USER', 'SYSTEM_USER'),
+       (2, current_timestamp, current_timestamp, FALSE, "role_user", 'SYSTEM_USER', 'SYSTEM_USER');
 
 INSERT INTO role_permission
 VALUES (1, 1),
@@ -62,13 +64,16 @@ VALUES (1, 1),
        (1, 23),
        (1, 24),
        (1, 25),
+       (1, 26),
+       (1, 27),
        (2, 13),
        (2, 14),
        (2, 15),
        (2, 16),
        (2, 17),
        (2, 18),
-       (2, 19);
+       (2, 19),
+       (2, 20);
 
-INSERT  INTO hibernate_sequence
-VALUE (10);
+INSERT INTO hibernate_sequence
+    VALUE (10);

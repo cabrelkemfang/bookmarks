@@ -61,7 +61,7 @@ public class RoleServiceImpl implements RoleService {
             throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
 
-        Page<Role> roles = this.roleRepository.findAll(PageRequest.of(page-1, size));
+        Page<Role> roles = this.roleRepository.findAll(PageRequest.of(page - 1, size));
         return new PageableResult<>(page,
                 size,
                 roles.getTotalElements(),

@@ -30,7 +30,7 @@ public class emailServiceImpl implements EmailService {
 
 
     @Override
-    public DataResponse<Void> sendTextEmail(String body, String subject, String sendTo)  {
+    public DataResponse<Void> sendTextEmail(String body, String subject, String sendTo) {
 
         MimeMessage message = javaMailSender.createMimeMessage();
 

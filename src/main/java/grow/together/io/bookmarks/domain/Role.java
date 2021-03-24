@@ -20,11 +20,11 @@ public class Role extends AuditableModel {
 
     private String name;
 
-    private boolean isDelete= false;
+    private boolean isDelete = false;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "role_permission",
             joinColumns = {@JoinColumn(name = "role_id")},
             inverseJoinColumns = {@JoinColumn(name = "permission_id")})
-    private List<Permission> permissions ;
+    private List<Permission> permissions;
 }

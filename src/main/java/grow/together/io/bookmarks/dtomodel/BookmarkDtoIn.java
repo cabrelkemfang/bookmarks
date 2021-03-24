@@ -11,13 +11,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDtoIn {
+public class BookmarkDtoIn {
     @NotEmpty(message = "Please provide the link")
     @UniquePostLink
     private String link;
 
     @NotEmpty(message = "Please provide the category")
-    private List<String> category;
+    private String category;
 
     @NotEmpty(message = "Please provide the Status")
     private String status;

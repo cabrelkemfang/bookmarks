@@ -8,12 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDtaoOut {
+    private Long id;
     private String email;
     private String github;
     private String name;
     private boolean active;
-    private long privatePost;
-    private long publicPost;
+    private long privateBookmarks;
+    private long publicBookmarks;
     private String createdAt;
     private String roleName;
 }

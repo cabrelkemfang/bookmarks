@@ -10,15 +10,20 @@ import grow.together.io.bookmarks.errorhandler.BadRequestException;
 import grow.together.io.bookmarks.errorhandler.ResourceNotFoundException;
 import grow.together.io.bookmarks.eventlistener.UserRegistrationEvent;
 import grow.together.io.bookmarks.eventlistener.UserStatusEvent;
-import grow.together.io.bookmarks.repository.PostRepository;
+import grow.together.io.bookmarks.repository.BookmarkRepository;
 import grow.together.io.bookmarks.repository.RoleRepository;
 import grow.together.io.bookmarks.repository.UserRepository;
 import grow.together.io.bookmarks.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
@@ -27,23 +32,26 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.security.Principal;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PostRepository postRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenStore tokenStore;
     private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PostRepository postRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore, ApplicationEventPublisher eventPublisher) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BookmarkRepository bookmarkRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore, ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.postRepository = postRepository;
+        this.bookmarkRepository = bookmarkRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenStore = tokenStore;
         this.eventPublisher = eventPublisher;
@@ -79,13 +87,14 @@ public class UserServiceImpl implements UserService {
                 size,
                 userPage.getTotalElements(),
                 userPage.getTotalPages(),
-                userPage.getContent().stream().map(user -> getUserDtoOut(user, this.postRepository)).collect(Collectors.toList())
+                userPage.getContent().stream().map(user -> getUserDtoOut(user, this.bookmarkRepository)).collect(Collectors.toList())
         );
     }
+
     @Override
     public DataResponse<UserDtaoOut> getUserById(Long userId) {
         User user = this.getById(userId);
-        return new DataResponse<>("User Load Successfully", HttpStatus.OK.value(), getUserDtoOut(user, this.postRepository));
+        return new DataResponse<>("User Load Successfully", HttpStatus.OK.value(), getUserDtoOut(user, this.bookmarkRepository));
     }
 
     @Override
@@ -126,13 +135,32 @@ public class UserServiceImpl implements UserService {
         return new DataResponse<>("Logout Successfully", HttpStatus.NO_CONTENT.value());
     }
 
+    @Override
+    public DataResponse<LoginUser> loginUser() {
+
+        Authentication principal = SecurityContextHolder.getContext().getAuthentication();
+
+        LoginUser loginUser = new LoginUser();
+
+        loginUser.setEmail(principal.getName());
+
+        List<String> permission = principal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        loginUser.setPermissions(permission);
+
+        return new DataResponse<>("Current User", HttpStatus.OK.value(), loginUser);
+
+    }
+
 
     private User getById(Long userId) {
         return this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No User Found With Id :" + userId));
     }
 
 
-    private  User getUser(String email) {
+    private User getUser(String email) {
         return this.userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User Not Found With User Email " + email));
     }
 
@@ -160,16 +188,17 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private static UserDtaoOut getUserDtoOut(User user, PostRepository postRepository) {
+    private static UserDtaoOut getUserDtoOut(User user, BookmarkRepository bookmarkRepository) {
         UserDtaoOut userMapper = new UserDtaoOut();
 
+        userMapper.setId(user.getId());
         userMapper.setActive(user.isActive());
         userMapper.setGithub(user.getGithub());
         userMapper.setEmail(user.getEmail());
         userMapper.setName(user.getName());
         userMapper.setRoleName(user.getRole().getName());
-        userMapper.setPublicPost(postRepository.countPostByStatus(user.getId(), GroupStatus.PUBLIC));
-        userMapper.setPrivatePost(postRepository.countPostByStatus(user.getId(), GroupStatus.PRIVATE));
+        userMapper.setPublicBookmarks(bookmarkRepository.countBookmarksByStatus(user.getId(), GroupStatus.PUBLIC));
+        userMapper.setPrivateBookmarks(bookmarkRepository.countBookmarksByStatus(user.getId(), GroupStatus.PRIVATE));
         userMapper.setCreatedAt(user.getCreatedAt().toString());
 
         return userMapper;

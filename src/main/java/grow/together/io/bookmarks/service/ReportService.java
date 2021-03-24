@@ -5,6 +5,6 @@ import grow.together.io.bookmarks.dtomodel.*;
 public interface ReportService {
     DataResponse<SummaryReport> getSummaryReport();
 
-    DataResponse<UserSummaryReport> getSummaryPostReportByUser(Long user_id);
+    DataResponse<UserSummaryReport> getSummaryBookmarksReportByUser(Long user_id);
 
 }

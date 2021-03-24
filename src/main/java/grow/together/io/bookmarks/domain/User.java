@@ -34,10 +34,10 @@ public class User extends AuditableModel {
     private boolean isDelete = false;
 
     @Column(name = "account_non_locked")
-    private boolean accountNonLocked=true;
+    private boolean accountNonLocked = true;
 
     @Column(name = "failed_attempt")
-    private int failedAttempt=0;
+    private int failedAttempt = 0;
 
     @Column(name = "lock_time")
     private LocalDateTime lockTime;

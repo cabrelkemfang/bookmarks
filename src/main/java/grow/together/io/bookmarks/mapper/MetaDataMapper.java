@@ -9,11 +9,8 @@ public class MetaDataMapper {
 
     public MetaData map(MetaDataDto metaDataDto) {
         MetaData metaData = new MetaData();
-
         metaData.setTitle(metaDataDto.getTitle());
-        metaData.setDescription(metaDataDto.getDescription());
         metaData.setUrl(metaDataDto.getUrl());
-        metaData.setSiteName(metaDataDto.getSiteName());
         metaData.setImageLink(metaDataDto.getImageLink());
         return metaData;
     }

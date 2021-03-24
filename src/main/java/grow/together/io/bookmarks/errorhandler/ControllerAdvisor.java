@@ -1,9 +1,11 @@
 package grow.together.io.bookmarks.errorhandler;
 
 
+import com.sun.mail.util.MailConnectException;
 import grow.together.io.bookmarks.dtomodel.ErrorValidatorDetail;
 import grow.together.io.bookmarks.dtomodel.ValidationError;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,9 @@ import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.EOFException;
+import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +57,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({SocketTimeoutException.class, MessagingException.class, IndexOutOfBoundsException.class, EOFException.class, MailSendException.class})
+    @ExceptionHandler({
+            SocketTimeoutException.class,
+            ClientAbortException.class,
+            MessagingException.class,
+            IndexOutOfBoundsException.class,
+            EOFException.class,
+            MailSendException.class,
+            IOException.class,
+            MailConnectException.class
+    })
     public ResponseEntity<ErrorValidatorDetail> socketTimeoutRequestException(Exception e) {
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
         errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -126,6 +139,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UnknownHostException.class)
+    public ResponseEntity<ErrorValidatorDetail> handleRetryException(UnknownHostException e) {
+        ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
+        errorDetails.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorDetails.setMessage("Meta Data Unavailable please Retry Again");
+        errorDetails.setTitle("Retry Exception");
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(DeleteNotAllowExeption.class)
     public ResponseEntity<ErrorValidatorDetail> handleDeleNotException(DeleteNotAllowExeption deleteNotAllowExeption,
                                                                        HttpServletRequest httpServletRequest) {
@@ -144,7 +167,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                                                                   WebRequest webRequest) {
 
         ErrorValidatorDetail errorDetails = new ErrorValidatorDetail();
-        errorDetails.setStatus(httpStatus.value());
+//        errorDetails.setStatus(httpStatus.value());
         errorDetails.setTitle("Message Not Readable");
         errorDetails.setMessage(messageNotReadableException.getMessage());
 

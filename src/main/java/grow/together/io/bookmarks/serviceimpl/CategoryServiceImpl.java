@@ -8,7 +8,7 @@ import grow.together.io.bookmarks.errorhandler.BadRequestException;
 import grow.together.io.bookmarks.errorhandler.DeleteNotAllowExeption;
 import grow.together.io.bookmarks.errorhandler.ResourceNotFoundException;
 import grow.together.io.bookmarks.repository.CategoryRepository;
-import grow.together.io.bookmarks.repository.PostRepository;
+import grow.together.io.bookmarks.repository.BookmarkRepository;
 import grow.together.io.bookmarks.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,12 +20,12 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final PostRepository postRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, PostRepository postRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, BookmarkRepository bookmarkRepository) {
         this.categoryRepository = categoryRepository;
-        this.postRepository = postRepository;
+        this.bookmarkRepository = bookmarkRepository;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public DataResponse<Void> delete(Long catgId) throws DeleteNotAllowExeption {
-        long count = this.postRepository.categoryCount(catgId);
+        long count = this.bookmarkRepository.categoryCount(catgId);
         if (count != 0) {
             throw new DeleteNotAllowExeption("The Role Can't be deleted because it is currently been use");
         } else {

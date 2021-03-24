@@ -1,23 +1,22 @@
-
 #Datasource configuration
 spring:
   jpa:
     hibernate:
       ddl-auto: validate
   datasource:
-    url: jdbc:mysql://td5l74lo6615qq42.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/t1fk31jiq2mc9a2a
-    username: h5b4g6dkq0w3gjli
-    password: wtvxfecp1054t32a
+    url: jdbc:mysql://td5l74lo6615qq42.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/kelx0q1a2hgt7np0
+    username: wvtlak351viskfu4
+    password: rsmdfyzvcsif467d
   flyway:
     enabled: true
-    user: h5b4g6dkq0w3gjli
-    password: wtvxfecp1054t32a
+    user: wvtlak351viskfu4
+    password: rsmdfyzvcsif467d
   aouth:
     client_id: bootmarks-client-id
     client_secret: bootmarks-client-secret
-    tokenValidity: 9000
-    refrechTokenValidity: 9000
-    auth_server: https://bookmarks-rest-api-v0.herokuapp.com:7075/oauth/token
+    tokenValidity: 10000
+    refrechTokenValidity: 10000
+    auth_server: https://bookmarks-api-v1.herokuapp.com/oauth/token
     resourceIds: resources-api
     signingKey: 123
     max-failled-attempts: 5
@@ -29,5 +28,9 @@ spring:
   bookmarks:
     admin-email: ghislainck7@gmail.com
     password: BookmarksStore@237
-    ui_base_url: http://localhost:4200
+    ui_base_url: https://bookmarks-ui.herokuapp.com
+
+server:
+  port: ${PORT:8080}
+
 

@@ -2,7 +2,7 @@ package grow.together.io.bookmarks.serviceimpl;
 
 import grow.together.io.bookmarks.domain.GroupStatus;
 import grow.together.io.bookmarks.dtomodel.*;
-import grow.together.io.bookmarks.repository.PostRepository;
+import grow.together.io.bookmarks.repository.BookmarkRepository;
 import grow.together.io.bookmarks.repository.SubscribersRepository;
 import grow.together.io.bookmarks.repository.UserRepository;
 import grow.together.io.bookmarks.service.ReportService;
@@ -15,31 +15,31 @@ public class SummaryReportServiceImpl implements ReportService {
 
     private final UserRepository userRepository;
     private final SubscribersRepository subscribersRepository;
-    private final PostRepository postRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @Autowired
-    public SummaryReportServiceImpl(UserRepository userRepository, SubscribersRepository subscribersRepository, PostRepository postRepository) {
+    public SummaryReportServiceImpl(UserRepository userRepository, SubscribersRepository subscribersRepository, BookmarkRepository bookmarkRepository) {
         this.userRepository = userRepository;
         this.subscribersRepository = subscribersRepository;
-        this.postRepository = postRepository;
+        this.bookmarkRepository = bookmarkRepository;
     }
 
     @Override
     public DataResponse<SummaryReport> getSummaryReport() {
         SummaryReport summaryReport = new SummaryReport();
         summaryReport.setToSubscribers(this.subscribersRepository.countBySubscriber());
-        summaryReport.setTotalPosts(this.postRepository.countByPost());
+        summaryReport.setTotalBookmarks(this.bookmarkRepository.countByBookmarks());
         summaryReport.setTotalUsers(this.userRepository.countByUsers());
 
         return new DataResponse<>("Summary Report", HttpStatus.OK.value(), summaryReport);
     }
 
     @Override
-    public DataResponse<UserSummaryReport> getSummaryPostReportByUser(Long userId) {
+    public DataResponse<UserSummaryReport> getSummaryBookmarksReportByUser(Long userId) {
 
         UserSummaryReport userSummaryReport = new UserSummaryReport();
-        userSummaryReport.setTotalPrivatePosts(this.postRepository.countPostByStatus(userId, GroupStatus.PRIVATE));
-        userSummaryReport.setTotalPublicPosts(this.postRepository.countPostByStatus(userId, GroupStatus.PUBLIC));
+        userSummaryReport.setTotalPrivateBookmarks(this.bookmarkRepository.countBookmarksByStatus(userId, GroupStatus.PRIVATE));
+        userSummaryReport.setTotalPublicBookmarks(this.bookmarkRepository.countBookmarksByStatus(userId, GroupStatus.PUBLIC));
 
         return new DataResponse<>("Summary Report", HttpStatus.OK.value(), userSummaryReport);
     }

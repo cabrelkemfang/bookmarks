@@ -5,6 +5,7 @@ import grow.together.io.bookmarks.dtomodel.CategoryDtoIn;
 import grow.together.io.bookmarks.dtomodel.DataResponse;
 import grow.together.io.bookmarks.dtomodel.ErrorValidatorDetail;
 import grow.together.io.bookmarks.dtomodel.PageableResult;
+import grow.together.io.bookmarks.errorhandler.DeleteNotAllowExeption;
 import grow.together.io.bookmarks.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,10 +34,16 @@ public class CategoryController {
     @ApiOperation(value = "Retrieve All  Category")
     @PreAuthorize("hasAuthority('VIEW_CATEGORIES')")
     public PageableResult<Category> getAllCategory(@RequestParam(defaultValue = "1", required = false) int page,
-                                                   @RequestParam(defaultValue = "10", required = false) int size) {
+                                                   @RequestParam(defaultValue = "30", required = false) int size) {
         return this.categoryService.findAll(page, size);
     }
 
+
+    @DeleteMapping(path = "/{catgId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('DELETE_CATEGORY')")
+    public DataResponse<Void> DeleteCategory(@PathVariable Long catgId) throws DeleteNotAllowExeption {
+        return this.categoryService.delete(catgId);
+    }
 
     @GetMapping(path = "/{catgId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retrieve Category By Id")
@@ -57,5 +64,13 @@ public class CategoryController {
     })
     public DataResponse<Void> createCategory(@Valid @RequestBody CategoryDtoIn categoryDtoIn) {
         return this.categoryService.save(categoryDtoIn);
+    }
+
+    @GetMapping(path = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('SEARCH_CATEGORY')")
+    public PageableResult<Category> searchCategory(@RequestParam String searchBy,
+                                                   @RequestParam(required = false, defaultValue = "1") int page,
+                                                   @RequestParam(required = false, defaultValue = "9") int size) {
+        return this.categoryService.searchCategory(page, size, searchBy);
     }
 }

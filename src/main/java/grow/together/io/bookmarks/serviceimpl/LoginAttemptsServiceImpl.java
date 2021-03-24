@@ -38,7 +38,7 @@ public class LoginAttemptsServiceImpl implements LoginAttempsService {
     @Transactional
     public void lock(User user) {
         user.setAccountNonLocked(false);
-        user.setLockTime( LocalDateTime.now());
+        user.setLockTime(LocalDateTime.now());
         this.userRepository.save(user);
     }
 

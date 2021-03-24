@@ -48,8 +48,8 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/oauth/token",
                         "/api/bookmarks/v1/oauth/sign-up"
                 ).permitAll()
-                .anyRequest().authenticated()
-                .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler);
+                .anyRequest().authenticated();
+//                .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler);
     }
 
     @Override

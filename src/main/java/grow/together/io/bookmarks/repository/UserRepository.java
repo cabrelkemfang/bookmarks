@@ -38,5 +38,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void updateFailedAttempts(@Param("failAttempts") int failAttempts, @Param("email") String email);
 
     @Query(value = "Select * from user u where u.failed_attempt = :failedAttempt and TIMESTAMPDIFF(MINUTE, u.lock_time, NOW()) >= :duration", nativeQuery = true)
-    List<User> getLockUser(int failedAttempt,  int duration);
+    List<User> getLockUser(int failedAttempt, int duration);
 }

@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 public class MetaDataDto {
     private String title;
     private String imageLink;
-    private String description;
     private String url;
-    private String siteName;
     private String iconLink;
 }

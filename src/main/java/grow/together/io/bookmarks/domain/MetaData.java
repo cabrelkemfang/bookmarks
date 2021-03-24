@@ -23,11 +23,5 @@ public class MetaData {
     private String imageLink;
 
     @Column
-    private String description;
-
-    @Column
     private String url;
-
-    @Column
-    private String siteName;
 }

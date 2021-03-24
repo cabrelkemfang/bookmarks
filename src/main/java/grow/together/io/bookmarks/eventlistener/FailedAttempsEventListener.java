@@ -34,7 +34,7 @@ public class FailedAttempsEventListener implements ApplicationListener<FailledAt
         User user = failledAttempsEvent.getUser();
         String title = " Account Lock";
         String content = " Your account has been locked due to " + maxFailledAttempts +
-                " failed attempts.It will be unlocked after"  + failledTime + " minutes. ";
+                " failed attempts.It will be unlocked after" + failledTime + " minutes. ";
 
         String body = EmailTemplate.getEmailTemplate(user.getName(), content, title);
 
