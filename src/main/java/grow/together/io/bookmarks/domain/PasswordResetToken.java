@@ -1,10 +1,12 @@
 package grow.together.io.bookmarks.domain;
 
 
+import grow.together.io.bookmarks.dtomodel.AuditableModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.domain.Auditable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,9 +17,7 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @Table
-public class PasswordResetToken {
-    private static final int EXPIRATION = 60 * 24;
-
+public class PasswordResetToken extends AuditableModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,5 +28,8 @@ public class PasswordResetToken {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    private LocalDateTime expiryDate;
+    public PasswordResetToken(String token, User user) {
+        this.token = token;
+        this.user = user;
+    }
 }

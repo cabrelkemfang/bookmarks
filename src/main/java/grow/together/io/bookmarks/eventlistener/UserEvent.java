@@ -5,10 +5,10 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class FailledAttempsEvent extends ApplicationEvent {
+public class UserEvent extends ApplicationEvent {
     private final User user;
 
-    public FailledAttempsEvent(User user) {
+    public UserEvent(User user) {
         super(user);
         this.user = user;
     }

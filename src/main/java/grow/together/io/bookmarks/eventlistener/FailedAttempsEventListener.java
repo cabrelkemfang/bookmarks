@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class FailedAttempsEventListener implements ApplicationListener<FailledAttempsEvent> {
+public class FailedAttempsEventListener implements ApplicationListener<UserEvent> {
     @Value("${spring.aouth.max-failled-attempts}")
     private int maxFailledAttempts;
     @Value("${spring.aouth.lock-time}")
@@ -27,11 +27,11 @@ public class FailedAttempsEventListener implements ApplicationListener<FailledAt
 
     @Override
     @Async("bookmarksTaskExecutor")
-    public void onApplicationEvent(FailledAttempsEvent failledAttempsEvent) {
+    public void onApplicationEvent(UserEvent userEvent) {
         log.info("-------------------------------Failled Attemps Event------------------------------------------------------------------------");
 
         String subject = "Your Account Have Been Lock";
-        User user = failledAttempsEvent.getUser();
+        User user = userEvent.getUser();
         String title = " Account Lock";
         String content = " Your account has been locked due to " + maxFailledAttempts +
                 " failed attempts.It will be unlocked after" + failledTime + " minutes. ";

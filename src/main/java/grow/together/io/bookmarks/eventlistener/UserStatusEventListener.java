@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class UserStatusEventListener implements ApplicationListener<UserStatusEvent> {
+public class UserStatusEventListener implements ApplicationListener<UserEvent> {
 
     @Value("${bookmarks.ui_base_url}")
     private String baseUrl;
@@ -27,11 +27,11 @@ public class UserStatusEventListener implements ApplicationListener<UserStatusEv
 
     @Override
     @Async("bookmarksTaskExecutor")
-    public void onApplicationEvent(UserStatusEvent userStatusEvent) {
-        log.info("-------------------------------User Status Event------------------------------------------------------------------------");
+    public void onApplicationEvent(UserEvent userEvent) {
+        log.info("-------------------------------User Status Event----------------------------------------------");
 
         String subject = "Your Account Created Have been Activated";
-        User user = userStatusEvent.getUser();
+        User user = userEvent.getUser();
         String title = " Account Activation";
         String content = "You Account Have Been Successfully Activated ." +
                 "\nTo Access The Dashboard click on the following : " + baseUrl + "/login";

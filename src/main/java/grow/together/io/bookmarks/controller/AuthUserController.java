@@ -1,8 +1,6 @@
 package grow.together.io.bookmarks.controller;
 
-import grow.together.io.bookmarks.dtomodel.DataResponse;
-import grow.together.io.bookmarks.dtomodel.LoginUser;
-import grow.together.io.bookmarks.dtomodel.UserDtaoIn;
+import grow.together.io.bookmarks.dtomodel.*;
 import grow.together.io.bookmarks.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,6 +27,16 @@ public class AuthUserController {
     @GetMapping(path = "user-info", produces = MediaType.APPLICATION_JSON_VALUE)
     public DataResponse<LoginUser> getLoginUserInfo() {
         return this.userService.loginUser();
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/reset-password")
+    public DataResponse<Void> resetPassword(@RequestParam String email) {
+        return this.userService.resetPassword(email);
+    }
+
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/change-password")
+    public DataResponse<Void> changePassword(@RequestBody ResetPasswordDto resetPasswordDto, @RequestParam String token) {
+        return this.userService.changePassword(resetPasswordDto, token);
     }
 
 //    @DeleteMapping(path = "/logout/{tokenValue}")

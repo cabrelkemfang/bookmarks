@@ -3,19 +3,23 @@ package grow.together.io.bookmarks.serviceimpl;
 
 import grow.together.io.bookmarks.common.VariableName;
 import grow.together.io.bookmarks.domain.GroupStatus;
+import grow.together.io.bookmarks.domain.PasswordResetToken;
 import grow.together.io.bookmarks.domain.Role;
 import grow.together.io.bookmarks.domain.User;
 import grow.together.io.bookmarks.dtomodel.*;
 import grow.together.io.bookmarks.errorhandler.BadRequestException;
 import grow.together.io.bookmarks.errorhandler.ResourceNotFoundException;
-import grow.together.io.bookmarks.eventlistener.UserRegistrationEvent;
-import grow.together.io.bookmarks.eventlistener.UserStatusEvent;
+import grow.together.io.bookmarks.errorhandler.UsernameNotFoundException;
+import grow.together.io.bookmarks.eventlistener.ResetTokenEvent;
+import grow.together.io.bookmarks.eventlistener.UserEvent;
 import grow.together.io.bookmarks.repository.BookmarkRepository;
+import grow.together.io.bookmarks.repository.ResetTokenRepository;
 import grow.together.io.bookmarks.repository.RoleRepository;
 import grow.together.io.bookmarks.repository.UserRepository;
 import grow.together.io.bookmarks.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +27,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
@@ -32,8 +35,11 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.security.Principal;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,15 +52,20 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final TokenStore tokenStore;
     private final ApplicationEventPublisher eventPublisher;
+    private final ResetTokenRepository resetTokenRepository;
+
+    @Value("${bookmarks.expiration_token}")
+    private String expired_token_time;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BookmarkRepository bookmarkRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore, ApplicationEventPublisher eventPublisher) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BookmarkRepository bookmarkRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore, ApplicationEventPublisher eventPublisher, ResetTokenRepository resetTokenRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bookmarkRepository = bookmarkRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenStore = tokenStore;
         this.eventPublisher = eventPublisher;
+        this.resetTokenRepository = resetTokenRepository;
     }
 
 
@@ -64,7 +75,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper(userDtaoIn, "role_user");
         this.userRepository.save(user);
 
-        eventPublisher.publishEvent(new UserRegistrationEvent(user));
+        eventPublisher.publishEvent(new UserEvent(user));
         return new DataResponse<>("User Created Successfully", HttpStatus.CREATED.value());
     }
 
@@ -73,7 +84,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper(userDtaoIn, "role_admin");
         this.userRepository.save(user);
 
-        eventPublisher.publishEvent(new UserRegistrationEvent(user));
+        eventPublisher.publishEvent(new UserEvent(user));
         return new DataResponse<>("User Admin Created Successfully", HttpStatus.CREATED.value());
     }
 
@@ -106,7 +117,7 @@ public class UserServiceImpl implements UserService {
         user.setActive(status);
         this.userRepository.save(user);
 
-        eventPublisher.publishEvent(new UserStatusEvent(user));
+        eventPublisher.publishEvent(new UserEvent(user));
         return new DataResponse<>("Status Updated Successfully", HttpStatus.OK.value());
     }
 
@@ -120,8 +131,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public DataResponse<Void> resetPassword(String userEmail) {
-        return null;
+        User user = this.userRepository.findByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User Not Found With User Email " + userEmail));
+
+        //generated token
+        String token = generateToken();
+
+        PasswordResetToken myToken = new PasswordResetToken(token, user);
+
+        this.resetTokenRepository.save(myToken);
+
+        //sent token by mail
+        eventPublisher.publishEvent(new ResetTokenEvent(myToken));
+        return new DataResponse<>("You Token Have Been Reset Successfully Please check you Email", HttpStatus.OK.value());
+    }
+
+    @Override
+    public DataResponse<Void> changePassword(ResetPasswordDto resetPasswordDto, String token) {
+
+        PasswordResetToken passwordResetToken = resetTokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResourceNotFoundException("Token Not Found"));
+
+
+        if (isTokenExpired(passwordResetToken.getCreatedAt(), Long.valueOf(expired_token_time))) {
+            throw new BadRequestException("Token Expired");
+        }
+
+        User user = ResetPassword(passwordResetToken.getUser().getEmail(), resetPasswordDto.getPassword());
+
+        this.userRepository.save(user);
+
+        return new DataResponse<>("You Password Been Reset Successfully", HttpStatus.OK.value());
     }
 
     @Override
@@ -207,5 +248,41 @@ public class UserServiceImpl implements UserService {
         userMapper.setCreatedAt(user.getCreatedAt().toString());
 
         return userMapper;
+    }
+
+    /**
+     * Check whether the created token expired or not.
+     *
+     * @param tokenCreationDate
+     * @return true or false
+     */
+    private boolean isTokenExpired(final LocalDateTime tokenCreationDate, long expired_token_time) {
+
+        LocalDateTime now = LocalDateTime.now();
+        Duration diff = Duration.between(tokenCreationDate, now);
+
+        return diff.toMinutes() >= expired_token_time;
+    }
+
+
+    /**
+     * Generate unique token. You may add multiple parameters to create a strong
+     * token.
+     *
+     * @return unique token
+     */
+    private String generateToken() {
+        StringBuilder token = new StringBuilder();
+
+        return token.append(UUID.randomUUID().toString())
+                .append(UUID.randomUUID().toString()).toString();
+    }
+
+    private User ResetPassword(String email, String password) {
+        User user = this.userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(""));
+
+        user.setPassword(passwordEncoder.encode(password));
+        return user;
     }
 }

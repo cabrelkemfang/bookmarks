@@ -37,7 +37,7 @@ public class AuthenticationFailledEventListener {
     public void authenticationFailed(AuthenticationFailureBadCredentialsEvent event) {
 
         if (event.getSource() instanceof UsernamePasswordAuthenticationToken) {
-            log.info("-------------------------------Authentication FailureBad Credentials Event------------------------------------------------------------------------");
+            log.info("-------------------------------Authentication FailureBad Credentials Event-------------------------------------------------");
 
             String email = (String) event.getAuthentication().getPrincipal();
 
@@ -46,7 +46,7 @@ public class AuthenticationFailledEventListener {
             // update the failed login count for the user
             if (user.getFailedAttempt() >= maxFailledAttempts) {
                 this.loginAttempsService.lock(user);
-                eventPublisher.publishEvent(new FailledAttempsEvent(user));
+                eventPublisher.publishEvent(new UserEvent(user));
                 throw new UsernameNotFoundException("Your account has been locked due to " + maxFailledAttempts + " failed attempts. It will be unlocked after " + failledTime + " minutes.");
             } else {
                 this.loginAttempsService.increaseFailedAttempts(user);

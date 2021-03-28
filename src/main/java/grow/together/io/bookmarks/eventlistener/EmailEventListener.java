@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class EmailEventListener implements ApplicationListener<UserRegistrationEvent> {
+public class EmailEventListener implements ApplicationListener<UserEvent> {
 
     private final EmailService emailService;
 
@@ -29,8 +29,8 @@ public class EmailEventListener implements ApplicationListener<UserRegistrationE
 
     @Override
     @Async("bookmarksTaskExecutor")
-    public void onApplicationEvent(UserRegistrationEvent userRegistrationEvent) {
-        User user = userRegistrationEvent.getUser();
+    public void onApplicationEvent(UserEvent userEvent) {
+        User user = userEvent.getUser();
         String subject = "New Account Have been Created";
         String title = "New Account Creation";
         String content = "A New  Account Have Been Successfully Created On Bookmarks ." +
@@ -39,7 +39,8 @@ public class EmailEventListener implements ApplicationListener<UserRegistrationE
                 "\n <br>&nbsp; &nbsp; -Github Account: " + user.getGithub() +
                 "\n <br>&nbsp; &nbsp; -User Email: " + user.getEmail() +
                 "\n <br>&nbsp; &nbsp; -User Name: " + user.getName() +
-                "\n <br>To Access The Admin Dashboard click on the following : " + baseUrl + "/login";
+                "\n <br>To Access The Admin Dashboard click on the following : "
+                + "<p><a href=\"" + baseUrl + "/login" + "\">Login</a></p>";
 
         String body = EmailTemplate.getEmailTemplate("", content, title);
 

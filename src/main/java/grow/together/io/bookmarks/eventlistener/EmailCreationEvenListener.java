@@ -3,7 +3,6 @@ package grow.together.io.bookmarks.eventlistener;
 import grow.together.io.bookmarks.common.EmailTemplate;
 import grow.together.io.bookmarks.domain.User;
 import grow.together.io.bookmarks.service.EmailService;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class EmailCreationEvenListener implements ApplicationListener<UserRegistrationEvent> {
+public class EmailCreationEvenListener implements ApplicationListener<UserEvent> {
 
     private final EmailService emailService;
 
@@ -23,11 +22,11 @@ public class EmailCreationEvenListener implements ApplicationListener<UserRegist
 
     @Override
     @Async("bookmarksTaskExecutor")
-    public void onApplicationEvent(UserRegistrationEvent userRegistrationEvent) {
+    public void onApplicationEvent(UserEvent userEvent) {
         log.info("-------------------------------User Registration Event------------------------------------------------------------------------");
 
         String subject = "You Account Have Been Created On Bookmarks";
-        User user = userRegistrationEvent.getUser();
+        User user = userEvent.getUser();
         String title = "Account Creation";
         String content = "You Account Have Been Successfully Created On Bookmarks." +
                 "\n <br>You Will be notify when you account will be activated ." +
