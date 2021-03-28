@@ -1,12 +1,20 @@
 package grow.together.io.bookmarks.domain;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "bookmark")
+@Table
 public class PasswordResetToken {
     private static final int EXPIRATION = 60 * 24;
 

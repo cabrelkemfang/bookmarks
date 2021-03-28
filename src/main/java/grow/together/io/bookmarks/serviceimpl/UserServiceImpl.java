@@ -120,6 +120,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public DataResponse<Void> resetPassword(String userEmail) {
+        return null;
+    }
+
+    @Override
     public DataResponse<Void> logout(HttpServletRequest request) {
 
         String authorization = request.getHeader("Authorization");
