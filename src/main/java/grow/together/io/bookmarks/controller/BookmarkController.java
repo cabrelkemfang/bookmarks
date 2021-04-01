@@ -4,12 +4,16 @@ import grow.together.io.bookmarks.dtomodel.DataResponse;
 import grow.together.io.bookmarks.dtomodel.PageableResult;
 import grow.together.io.bookmarks.dtomodel.BookmarkDtoOut;
 import grow.together.io.bookmarks.service.BookmarksService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/bookmarks/v1/post")
+@Slf4j
 public class BookmarkController {
 
     private final BookmarksService bookmarksService;

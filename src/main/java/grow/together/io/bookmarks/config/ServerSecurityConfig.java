@@ -48,7 +48,8 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/oauth/token",
                         "/api/bookmarks/v1/oauth/sign-up",
                         "/api/bookmarks/v1/oauth/reset-password",
-                        "/api/bookmarks/v1/oauth/change-password"
+                        "/api/bookmarks/v1/oauth/change-password",
+                        "/api/bookmarks/v1/post/**"
                 ).permitAll()
                 .anyRequest().authenticated();
 //                .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler);
@@ -65,7 +66,8 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/webjars/**",
                 "/api/bookmarks/v1/oauth/sign-up",
                 "/api/bookmarks/v1/oauth/reset-password",
-                "/api/bookmarks/v1/oauth/change-password"
+                "/api/bookmarks/v1/oauth/change-password",
+                "/api/bookmarks/v1/post/**"
                 );
     }
 

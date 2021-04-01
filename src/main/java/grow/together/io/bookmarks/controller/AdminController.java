@@ -4,6 +4,7 @@ import grow.together.io.bookmarks.dtomodel.*;
 import grow.together.io.bookmarks.service.BookmarksService;
 import grow.together.io.bookmarks.service.ReportService;
 import grow.together.io.bookmarks.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/bookmarks/v1/admin")
+@Slf4j
 public class AdminController {
 
     private final BookmarksService bookmarksService;
@@ -25,7 +27,6 @@ public class AdminController {
         this.userService = userService;
         this.reportService = reportService;
     }
-
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('CREATE_ADMIN')")
