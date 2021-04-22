@@ -39,7 +39,7 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors
                         .basePackage("grow.together.io.bookmarks.controller"))
-                .paths(PathSelectors.regex("/api/bookmarks.*"))
+                .paths(PathSelectors.regex("/api/*.*"))
                 .build()
                 .securityContexts(Collections.singletonList(securityContext()))
                 .securitySchemes(Arrays.asList(securitySchema()/*, apiKey(), apiCookieKey()*/));
@@ -50,7 +50,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title(" Bookmarks Swagger APIs")
                 .description("This page lists all the rest apis for Swagger Bookmarks App.")
-                .version("1.0-SNAPSHOT")
+                .version("1.0")
                 .build();
     }
 

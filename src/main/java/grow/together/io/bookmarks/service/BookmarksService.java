@@ -8,25 +8,25 @@ import grow.together.io.bookmarks.dtomodel.BookmarkDtoOut;
 import java.io.IOException;
 
 public interface BookmarksService {
-    DataResponse<BookmarkDtoOut> getBookmarkById(Long post_id);
+    DataResponse<BookmarkDtoOut> findBookmark(Long post_id);
 
-    PageableResult<BookmarkDtoOut> getAllBookmark(int page, int size);
+    PageableResult<BookmarkDtoOut> fetchPublicBookmarks(int page, int size);
 
-    PageableResult<BookmarkDtoOut> searchBookmark(int page, int size, String title);
+    PageableResult<BookmarkDtoOut> searchPublicBookmark(int page, int size, String title);
 
     PageableResult<BookmarkDtoOut> searchBookmarkByAdmin(int page, int size, String title);
 
-    PageableResult<BookmarkDtoOut> searchBookmarkByUser(int page, int size, String title);
+    PageableResult<BookmarkDtoOut> searchUserBookmark(int page, int size, String title);
 
-    DataResponse<Void> createBookmarkByUser(BookmarkDtoIn bookmarkDtoIn) throws IOException;
+    DataResponse<Void> createBookmark(BookmarkDtoIn bookmarkDtoIn) throws IOException;
 
-    DataResponse<Void> deleteBookmarkByUser(Long post_id);
+    DataResponse<Void> deleteUserBookmark(Long bookmarkId);
 
-    PageableResult<BookmarkDtoOut> getAllBookmarkByUserId(int page, int size);
+    PageableResult<BookmarkDtoOut> fetchUserBookmarks(int page, int size);
 
     DataResponse<BookmarkDtoOut> getBookmarkByUserIdAndBookmarkId(Long post_id);
 
-    PageableResult<BookmarkDtoOut> getAllBookmarkByAdmin(int page, int size);
+    PageableResult<BookmarkDtoOut> fetchBookmarks(int page, int size);
 
     PageableResult<BookmarkDtoOut> getBookmarkByCategory(int page, int size, String category_name);
 }

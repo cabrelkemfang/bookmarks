@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.common;
 
-public class EmailTemplate {
+public final class EmailTemplate {
 
     public static String getEmailTemplate(String receiver, String content, String title) {
 

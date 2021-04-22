@@ -1,4 +1,4 @@
-package grow.together.io.bookmarks.eventlistener;
+package grow.together.io.bookmarks.eventlistener.event;
 
 
 import grow.together.io.bookmarks.domain.PasswordResetToken;
@@ -9,8 +9,8 @@ import org.springframework.context.ApplicationEvent;
 public class ResetTokenEvent extends ApplicationEvent {
     private final PasswordResetToken passwordResetToken;
 
-    public ResetTokenEvent(PasswordResetToken passwordResetToken) {
-        super(passwordResetToken);
+    public ResetTokenEvent(Object source, PasswordResetToken passwordResetToken) {
+        super(source);
         this.passwordResetToken = passwordResetToken;
     }
 }

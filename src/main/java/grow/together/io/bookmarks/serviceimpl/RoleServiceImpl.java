@@ -8,6 +8,7 @@ import grow.together.io.bookmarks.dtomodel.RoleDtoIn;
 import grow.together.io.bookmarks.dtomodel.RoleDtoOut;
 import grow.together.io.bookmarks.errorhandler.BadRequestException;
 import grow.together.io.bookmarks.errorhandler.ResourceNotFoundException;
+import grow.together.io.bookmarks.mapper.RoleMapper;
 import grow.together.io.bookmarks.repository.PermissionRepository;
 import grow.together.io.bookmarks.repository.RoleRepository;
 import grow.together.io.bookmarks.repository.UserRepository;
@@ -35,10 +36,10 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public DataResponse<RoleDtoOut> getRoleById(Long id) {
+    public DataResponse<RoleDtoOut> findRole(Long id) {
 
         Role role = this.findById(id);
-        return new DataResponse<>("Role Load Successfully", HttpStatus.OK.value(), new RoleDtoOut(role));
+        return new DataResponse<>("Role Load Successfully", HttpStatus.OK.value(), RoleMapper.map(role));
     }
 
     @Override
@@ -56,7 +57,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public PageableResult<RoleDtoOut> getAllRole(int page, int size) {
+    public PageableResult<RoleDtoOut> fetchRoles(int page, int size) {
         if (page < 0) {
             throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
@@ -66,7 +67,7 @@ public class RoleServiceImpl implements RoleService {
                 size,
                 roles.getTotalElements(),
                 roles.getTotalPages(),
-                roles.getContent().stream().map(RoleDtoOut::new).collect(Collectors.toList()));
+                roles.getContent().stream().map(RoleMapper::map).collect(Collectors.toList()));
     }
 
     @Override
@@ -74,6 +75,7 @@ public class RoleServiceImpl implements RoleService {
     public DataResponse<Void> deleteRole(Long roleId) {
         Role role = this.findById(roleId);
         long count = this.userRepository.countByRole(role.getName());
+
         if (count > 0) {
             throw new BadRequestException("The Role Can't Be Delete ,Is still be Assign to some users");
         }
@@ -97,6 +99,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     public Role findById(Long roleId) {
-        return this.roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException("No Role found with id :" + roleId));
+        return this.roleRepository.findById(roleId)
+                .orElseThrow(() -> new ResourceNotFoundException("No Role found with id :" + roleId));
     }
 }

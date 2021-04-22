@@ -1,5 +1,8 @@
 #Datasource configuration
 spring:
+  data:
+    rest:
+      base-path: /api/v1
   profiles:
     active: @spring.profiles.active@
   application:

@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/bookmarks/v1/post")
+@RequestMapping("/api/bookmarks")
 @Slf4j
 public class BookmarkController {
 
@@ -23,29 +22,29 @@ public class BookmarkController {
         this.bookmarksService = bookmarksService;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageableResult<BookmarkDtoOut> getAllBookmark(@RequestParam(required = false, defaultValue = "1") int page,
-                                                         @RequestParam(required = false, defaultValue = "9") int size) {
-        return this.bookmarksService.getAllBookmark(page, size);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
+    public PageableResult<BookmarkDtoOut> fetchBookmarks(@RequestParam(required = false, defaultValue = "1") int page,
+                                                         @RequestParam(required = false, defaultValue = "12") int size) {
+        return this.bookmarksService.fetchPublicBookmarks(page, size);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{postId}")
-    public DataResponse<BookmarkDtoOut> getBookmarkById(@PathVariable Long postId) {
-        return this.bookmarksService.getBookmarkById(postId);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE, path = "/{bookmarkId}")
+    public DataResponse<BookmarkDtoOut> findBookmark(@PathVariable Long bookmarkId) {
+        return this.bookmarksService.findBookmark(bookmarkId);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/category")
-    public PageableResult<BookmarkDtoOut> getBookmarkByCategory(@RequestParam String categName,
-                                                                @RequestParam(required = false, defaultValue = "1") int page,
-                                                                @RequestParam(required = false, defaultValue = "9") int size) {
-        return this.bookmarksService.getBookmarkByCategory(page, size, categName);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE, path = "/category")
+    public PageableResult<BookmarkDtoOut> findBookmarkByCategory(@RequestParam String name,
+                                                                 @RequestParam(required = false, defaultValue = "1") int page,
+                                                                 @RequestParam(required = false, defaultValue = "12") int size) {
+        return this.bookmarksService.getBookmarkByCategory(page, size, name);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/search")
-    public PageableResult<BookmarkDtoOut> searchBookmark(@RequestParam String searchBy,
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE, path = "/search")
+    public PageableResult<BookmarkDtoOut> searchPublicBookmark(@RequestParam String searchBy,
                                                          @RequestParam(required = false, defaultValue = "1") int page,
-                                                         @RequestParam(required = false, defaultValue = "9") int size) {
-        return this.bookmarksService.searchBookmark(page, size, searchBy);
+                                                         @RequestParam(required = false, defaultValue = "12") int size) {
+        return this.bookmarksService.searchPublicBookmark(page, size, searchBy);
     }
 
 }

@@ -11,9 +11,9 @@ public interface CategoryService {
 
     PageableResult<Category> findAll(int page, int size);
 
-    DataResponse<Void> delete(Long catg_id) throws DeleteNotAllowExeption;
+    DataResponse<Void> delete(Long categoryId) throws DeleteNotAllowExeption;
 
-    DataResponse<Category> findById(Long catg_id);
+    DataResponse<Category> findById(Long categoryId);
 
     PageableResult<Category> searchCategory(int page, int size, String category);
 }

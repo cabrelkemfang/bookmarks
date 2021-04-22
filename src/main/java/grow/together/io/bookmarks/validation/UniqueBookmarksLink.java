@@ -1,16 +1,17 @@
-package grow.together.io.bookmarks.validator.annotation;
+package grow.together.io.bookmarks.validation;
+
+import grow.together.io.bookmarks.validation.constraints.PostLinkValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = GithubValidator.class)
+@Constraint(validatedBy = PostLinkValidator.class)
 @Documented
-public @interface UniqueGithub {
-    String message() default "The Github Account is Already Been use";
+public @interface UniqueBookmarksLink {
+    String message() default "The Link Already Been Register";
 
     Class<?>[] groups() default {};
 

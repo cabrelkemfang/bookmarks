@@ -1,7 +1,8 @@
-package grow.together.io.bookmarks.validator.annotation;
+package grow.together.io.bookmarks.validation.constraints;
 
 import grow.together.io.bookmarks.domain.Category;
 import grow.together.io.bookmarks.repository.CategoryRepository;
+import grow.together.io.bookmarks.validation.UniqueCategoryName;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;

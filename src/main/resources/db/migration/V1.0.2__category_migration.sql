@@ -10,4 +10,5 @@ VALUES (1, current_timestamp,current_timestamp,'Angular','System','System'),
       (9, current_timestamp,current_timestamp,'Data Base','System','System'),
       (10, current_timestamp,current_timestamp,'GitHub','System','System'),
       (11, current_timestamp,current_timestamp,'Youtube','System','System'),
-      (12, current_timestamp,current_timestamp,'Books','System','System');
+      (12, current_timestamp,current_timestamp,'Books','System','System'),
+      (13, current_timestamp,current_timestamp,'Software','System','System');

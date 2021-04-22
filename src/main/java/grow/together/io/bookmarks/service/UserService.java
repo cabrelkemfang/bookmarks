@@ -9,9 +9,9 @@ public interface UserService {
 
     DataResponse<Void> createAdminUser(UserDtaoIn userDtaoIn);
 
-    PageableResult<UserDtaoOut> getAllUser(int page, int size);
+    PageableResult<UserDtoOut> fetchUsers(int page, int size);
 
-    DataResponse<UserDtaoOut> getUserById(Long user_id);
+    DataResponse<UserDtoOut> findUser(Long userId);
 
     DataResponse<Void> updateUserStatus(String email, boolean status);
 

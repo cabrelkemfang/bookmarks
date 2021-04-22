@@ -1,10 +1,9 @@
 package grow.together.io.bookmarks.dtomodel;
 
-import grow.together.io.bookmarks.validator.annotation.UniqueCategoryName;
+import grow.together.io.bookmarks.validation.UniqueCategoryName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.NotEmpty;
 
 @Data

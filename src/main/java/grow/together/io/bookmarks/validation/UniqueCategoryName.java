@@ -1,15 +1,16 @@
-package grow.together.io.bookmarks.validator.annotation;
+package grow.together.io.bookmarks.validation;
 
+import grow.together.io.bookmarks.validation.constraints.CategoryNameValidator;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PostLinkValidator.class)
+@Constraint(validatedBy = CategoryNameValidator.class)
 @Documented
-public @interface UniquePostLink {
-    String message() default "The Link Already Been Register";
+public @interface UniqueCategoryName {
+    String message() default "Category Already Exist";
 
     Class<?>[] groups() default {};
 

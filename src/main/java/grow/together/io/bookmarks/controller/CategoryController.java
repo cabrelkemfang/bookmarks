@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/bookmarks/v1/admin/category")
+@RequestMapping("/api/admin/category")
 @Api(value = "Category", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CategoryController {
 
@@ -33,26 +33,26 @@ public class CategoryController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retrieve All  Category")
     @PreAuthorize("hasAuthority('VIEW_CATEGORIES')")
-    public PageableResult<Category> getAllCategory(@RequestParam(defaultValue = "1", required = false) int page,
+    public PageableResult<Category> fetchCategory(@RequestParam(defaultValue = "1", required = false) int page,
                                                    @RequestParam(defaultValue = "30", required = false) int size) {
         return this.categoryService.findAll(page, size);
     }
 
 
-    @DeleteMapping(path = "/{catgId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path = "/{categoryId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('DELETE_CATEGORY')")
-    public DataResponse<Void> DeleteCategory(@PathVariable Long catgId) throws DeleteNotAllowExeption {
-        return this.categoryService.delete(catgId);
+    public DataResponse<Void> DeleteCategory(@PathVariable Long categoryId) throws DeleteNotAllowExeption {
+        return this.categoryService.delete(categoryId);
     }
 
-    @GetMapping(path = "/{catgId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{categoryId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retrieve Category By Id")
     @PreAuthorize("hasAuthority('VIEW_CATEGORY')")
     @ApiResponses(value = {
             @ApiResponse(code = 500, message = "Error ", response = ErrorValidatorDetail.class)
     })
-    public DataResponse<Category> getCategoryById(@PathVariable Long catgId) {
-        return this.categoryService.findById(catgId);
+    public DataResponse<Category> findCategory(@PathVariable Long categoryId) {
+        return this.categoryService.findById(categoryId);
     }
 
 

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/bookmarks/v1/user")
+@RequestMapping("/api/users")
 public class UserController {
     private final BookmarksService bookmarksService;
     private final UserService userService;
@@ -27,29 +27,29 @@ public class UserController {
         this.reportService = reportService;
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/post")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/bookmarks")
     @PreAuthorize("hasAuthority('CREATE_POST')")
     public DataResponse<Void> createBookmark(@Valid @RequestBody BookmarkDtoIn bookmarkDtoIn) throws IOException {
-        return this.bookmarksService.createBookmarkByUser(bookmarkDtoIn);
+        return this.bookmarksService.createBookmark(bookmarkDtoIn);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/bookmarks")
     @PreAuthorize("hasAuthority('VIEW_USER_POST')")
-    public PageableResult<BookmarkDtoOut> getBookmarkByUserId(@RequestParam(required = false, defaultValue = "1") int page,
+    public PageableResult<BookmarkDtoOut> fetchUserBookmarks(@RequestParam(required = false, defaultValue = "1") int page,
                                                               @RequestParam(required = false, defaultValue = "9") int size) {
-        return this.bookmarksService.getAllBookmarkByUserId(page, size);
+        return this.bookmarksService.fetchUserBookmarks(page, size);
     }
 
-    @GetMapping(path = "post/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "bookmarks/{bookmarkId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('VIEW_POST')")
-    public DataResponse<BookmarkDtoOut> getBookmarkByUserIdAndBookmarkId(@PathVariable Long postId) {
-        return this.bookmarksService.getBookmarkByUserIdAndBookmarkId(postId);
+    public DataResponse<BookmarkDtoOut> getBookmarkByUserIdAndBookmarkId(@PathVariable Long bookmarkId) {
+        return this.bookmarksService.getBookmarkByUserIdAndBookmarkId(bookmarkId);
     }
 
-    @DeleteMapping(path = "/post/{postId}")
+    @DeleteMapping(path = "/bookmarks/{bookmarkId}")
     @PreAuthorize("hasAuthority('DELETE_POST')")
-    public DataResponse<Void> deleteBookmark(@PathVariable Long postId) {
-        return this.bookmarksService.deleteBookmarkByUser(postId);
+    public DataResponse<Void> deleteBookmark(@PathVariable Long bookmarkId) {
+        return this.bookmarksService.deleteUserBookmark(bookmarkId);
     }
 
     @PutMapping()
@@ -64,11 +64,11 @@ public class UserController {
         return this.reportService.getSummaryBookmarksReportByUser(userId);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post/search")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/bookmarks/search")
     @PreAuthorize("hasAuthority('SEARCH_POST')")
     public PageableResult<BookmarkDtoOut> searchBookmark(@RequestParam String searchBy,
                                                          @RequestParam(required = false, defaultValue = "1") int page,
                                                          @RequestParam(required = false, defaultValue = "9") int size) {
-        return this.bookmarksService.searchBookmarkByUser(page, size, searchBy);
+        return this.bookmarksService.searchUserBookmark(page, size, searchBy);
     }
 }

@@ -1,4 +1,6 @@
-package grow.together.io.bookmarks.validator.annotation;
+package grow.together.io.bookmarks.validation;
+
+import grow.together.io.bookmarks.validation.constraints.RoleNameValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

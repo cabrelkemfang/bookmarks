@@ -18,7 +18,10 @@ public class SummaryReportServiceImpl implements ReportService {
     private final BookmarkRepository bookmarkRepository;
 
     @Autowired
-    public SummaryReportServiceImpl(UserRepository userRepository, SubscribersRepository subscribersRepository, BookmarkRepository bookmarkRepository) {
+    public SummaryReportServiceImpl(
+            UserRepository userRepository,
+            SubscribersRepository subscribersRepository,
+            BookmarkRepository bookmarkRepository) {
         this.userRepository = userRepository;
         this.subscribersRepository = subscribersRepository;
         this.bookmarkRepository = bookmarkRepository;

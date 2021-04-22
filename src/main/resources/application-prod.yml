@@ -4,13 +4,13 @@ spring:
     hibernate:
       ddl-auto: validate
   datasource:
-    url: jdbc:mysql://td5l74lo6615qq42.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/kelx0q1a2hgt7np0
-    username: wvtlak351viskfu4
-    password: cofh9eju1cz62eyd
+    url: jdbc:mysql://pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/hhxpr5dqvq6o1i39
+    username: jwrloe52fejelin8
+    password: s79rti7kktg4m8l2
   flyway:
     enabled: true
-    user: wvtlak351viskfu4
-    password: cofh9eju1cz62eyd
+    user: jwrloe52fejelin8
+    password: s79rti7kktg4m8l2
   aouth:
     client_id: bootmarks-client-id
     client_secret: bootmarks-client-secret

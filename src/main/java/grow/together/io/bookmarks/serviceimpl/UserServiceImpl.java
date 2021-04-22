@@ -10,8 +10,10 @@ import grow.together.io.bookmarks.dtomodel.*;
 import grow.together.io.bookmarks.errorhandler.BadRequestException;
 import grow.together.io.bookmarks.errorhandler.ResourceNotFoundException;
 import grow.together.io.bookmarks.errorhandler.UsernameNotFoundException;
-import grow.together.io.bookmarks.eventlistener.ResetTokenEvent;
-import grow.together.io.bookmarks.eventlistener.UserEvent;
+import grow.together.io.bookmarks.eventlistener.event.ResetTokenEvent;
+import grow.together.io.bookmarks.eventlistener.event.UpdateStatusEvent;
+import grow.together.io.bookmarks.eventlistener.event.UserCreationEvent;
+import grow.together.io.bookmarks.mapper.UserMapper;
 import grow.together.io.bookmarks.repository.BookmarkRepository;
 import grow.together.io.bookmarks.repository.ResetTokenRepository;
 import grow.together.io.bookmarks.repository.RoleRepository;
@@ -28,8 +30,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -58,7 +57,15 @@ public class UserServiceImpl implements UserService {
     private String expired_token_time;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BookmarkRepository bookmarkRepository, PasswordEncoder passwordEncoder, TokenStore tokenStore, ApplicationEventPublisher eventPublisher, ResetTokenRepository resetTokenRepository) {
+    public UserServiceImpl(
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            BookmarkRepository bookmarkRepository,
+            PasswordEncoder passwordEncoder,
+            TokenStore tokenStore,
+            ApplicationEventPublisher eventPublisher,
+            ResetTokenRepository resetTokenRepository
+    ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bookmarkRepository = bookmarkRepository;
@@ -72,40 +79,41 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public DataResponse<Void> createUser(UserDtaoIn userDtaoIn) {
-        User user = userMapper(userDtaoIn, "role_user");
+        User user = userDtoOut(userDtaoIn, "role_user");
         this.userRepository.save(user);
 
-        eventPublisher.publishEvent(new UserEvent(user));
+        eventPublisher.publishEvent(new UserCreationEvent(this, user));
         return new DataResponse<>("User Created Successfully", HttpStatus.CREATED.value());
     }
 
     @Override
     public DataResponse<Void> createAdminUser(UserDtaoIn userDtaoIn) {
-        User user = userMapper(userDtaoIn, "role_admin");
+        User user = userDtoOut(userDtaoIn, "role_admin");
         this.userRepository.save(user);
 
-        eventPublisher.publishEvent(new UserEvent(user));
+        eventPublisher.publishEvent(new UserCreationEvent(this, user));
         return new DataResponse<>("User Admin Created Successfully", HttpStatus.CREATED.value());
     }
 
     @Override
-    public PageableResult<UserDtaoOut> getAllUser(int page, int size) {
+    public PageableResult<UserDtoOut> fetchUsers(int page, int size) {
         if (page < 0) {
             throw new BadRequestException(VariableName.PAGE_LESS_THAN_ZERO);
         }
-        Page<User> userPage = this.userRepository.findAll(PageRequest.of(page - 1, size));
+        Page<User> users = this.userRepository.findAll(PageRequest.of(page - 1, size));
         return new PageableResult<>(page,
                 size,
-                userPage.getTotalElements(),
-                userPage.getTotalPages(),
-                userPage.getContent().stream().map(user -> getUserDtoOut(user, this.bookmarkRepository)).collect(Collectors.toList())
+                users.getTotalElements(),
+                users.getTotalPages(),
+                users.getContent().stream().map(user -> map(user, this.bookmarkRepository)).collect(Collectors.toList())
         );
     }
 
     @Override
-    public DataResponse<UserDtaoOut> getUserById(Long userId) {
+    public DataResponse<UserDtoOut> findUser(Long userId) {
         User user = this.getById(userId);
-        return new DataResponse<>("User Load Successfully", HttpStatus.OK.value(), getUserDtoOut(user, this.bookmarkRepository));
+
+        return new DataResponse<>("User Load Successfully", HttpStatus.OK.value(), map(user, this.bookmarkRepository));
     }
 
     @Override
@@ -113,19 +121,18 @@ public class UserServiceImpl implements UserService {
     public DataResponse<Void> updateUserStatus(String email, boolean status) {
 
         User user = this.getUser(email);
-
         user.setActive(status);
+
         this.userRepository.save(user);
 
-        eventPublisher.publishEvent(new UserEvent(user));
+        eventPublisher.publishEvent(new UpdateStatusEvent(this, user));
         return new DataResponse<>("Status Updated Successfully", HttpStatus.OK.value());
     }
 
     @Override
     public DataResponse<Void> updateUser(UserDtaoIn userDtaoIn, String name) {
         User user = getUser(name);
-
-        this.userRepository.save(userMapper(user, userDtaoIn));
+        this.userRepository.save(UserMapper.map(user, userDtaoIn));
 
         return new DataResponse<>("User Updated Successfully", HttpStatus.OK.value());
     }
@@ -143,7 +150,7 @@ public class UserServiceImpl implements UserService {
         this.resetTokenRepository.save(myToken);
 
         //sent token by mail
-        eventPublisher.publishEvent(new ResetTokenEvent(myToken));
+        eventPublisher.publishEvent(new ResetTokenEvent(this, myToken));
         return new DataResponse<>("You Token Have Been Reset Successfully Please check you Email", HttpStatus.OK.value());
     }
 
@@ -168,16 +175,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public DataResponse<Void> logout(HttpServletRequest request) {
 
-        String authorization = request.getHeader("Authorization");
-        if (authorization != null && authorization.contains("Bearer")) {
-            String tokenValue = authorization.replace("Bearer", "").trim();
-
-            OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
-            tokenStore.removeAccessToken(accessToken);
-
-            OAuth2RefreshToken refreshToken = accessToken.getRefreshToken();
-            tokenStore.removeRefreshToken(refreshToken);
-        }
+//        String authorization = request.getHeader("Authorization");
+//        if (authorization != null && authorization.contains("Bearer")) {
+//            String tokenValue = authorization.replace("Bearer", "").trim();
+//
+//            OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
+//            tokenStore.removeAccessToken(accessToken);
+//
+//            OAuth2RefreshToken refreshToken = accessToken.getRefreshToken();
+//            tokenStore.removeRefreshToken(refreshToken);
+//        }
         return new DataResponse<>("Logout Successfully", HttpStatus.NO_CONTENT.value());
     }
 
@@ -187,40 +194,34 @@ public class UserServiceImpl implements UserService {
         Authentication principal = SecurityContextHolder.getContext().getAuthentication();
 
         LoginUser loginUser = new LoginUser();
-
         loginUser.setEmail(principal.getName());
-
-        List<String> permission = principal.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-
-        loginUser.setPermissions(permission);
+        loginUser.setPermissions(permission(principal));
 
         return new DataResponse<>("Current User", HttpStatus.OK.value(), loginUser);
 
     }
 
+    private List<String> permission(Authentication principal) {
+        return principal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+    }
+
 
     private User getById(Long userId) {
-        return this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No User Found With Id :" + userId));
+        return this.userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("No User Found With Id :" + userId));
     }
 
 
     private User getUser(String email) {
-        return this.userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User Not Found With User Email " + email));
+        return this.userRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("User Not Found With User Email " + email));
     }
 
 
-    private static User userMapper(User user, UserDtaoIn userDtaoIn) {
-
-        user.setGithub(userDtaoIn.getGithub());
-        user.setEmail(userDtaoIn.getEmail());
-        user.setName(userDtaoIn.getName());
-
-        return user;
-    }
-
-    private User userMapper(UserDtaoIn userDtaoIn, String roleName) {
+    private User userDtoOut(UserDtaoIn userDtaoIn, String roleName) {
         User user = new User();
 
         user.setGithub(userDtaoIn.getGithub());
@@ -234,20 +235,11 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private static UserDtaoOut getUserDtoOut(User user, BookmarkRepository bookmarkRepository) {
-        UserDtaoOut userMapper = new UserDtaoOut();
+    private UserDtoOut map(User user, BookmarkRepository bookmarkRepository) {
+        long publicCount = bookmarkRepository.countBookmarksByStatus(user.getId(), GroupStatus.PUBLIC);
+        long privateCount = bookmarkRepository.countBookmarksByStatus(user.getId(), GroupStatus.PRIVATE);
 
-        userMapper.setId(user.getId());
-        userMapper.setActive(user.isActive());
-        userMapper.setGithub(user.getGithub());
-        userMapper.setEmail(user.getEmail());
-        userMapper.setName(user.getName());
-        userMapper.setRoleName(user.getRole().getName());
-        userMapper.setPublicBookmarks(bookmarkRepository.countBookmarksByStatus(user.getId(), GroupStatus.PUBLIC));
-        userMapper.setPrivateBookmarks(bookmarkRepository.countBookmarksByStatus(user.getId(), GroupStatus.PRIVATE));
-        userMapper.setCreatedAt(user.getCreatedAt().toString());
-
-        return userMapper;
+        return UserMapper.map(user, publicCount, privateCount);
     }
 
     /**

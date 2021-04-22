@@ -4,7 +4,6 @@ import grow.together.io.bookmarks.dtomodel.AuditableModel;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @NoArgsConstructor

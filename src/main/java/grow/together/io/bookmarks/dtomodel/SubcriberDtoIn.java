@@ -1,6 +1,6 @@
 package grow.together.io.bookmarks.dtomodel;
 
-import grow.together.io.bookmarks.validator.annotation.UniqueEmail;
+import grow.together.io.bookmarks.validation.UniqueEmail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

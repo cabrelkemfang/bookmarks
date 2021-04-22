@@ -4,14 +4,12 @@ import grow.together.io.bookmarks.domain.User;
 import grow.together.io.bookmarks.dtomodel.UserDtaoIn;
 import grow.together.io.bookmarks.repository.UserRepository;
 import grow.together.io.bookmarks.service.UserService;
-import grow.together.io.bookmarks.validator.annotation.UniqueGithub;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.Optional;
 
 @Component

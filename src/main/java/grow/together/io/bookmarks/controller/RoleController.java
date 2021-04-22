@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/bookmarks/v1/admin/role")
+@RequestMapping("/api/admin/roles")
 public class RoleController {
     private final RoleService roleService;
 
@@ -23,8 +23,8 @@ public class RoleController {
 
     @GetMapping(path = "/{roleId}")
     @PreAuthorize("hasAuthority('VIEW_ROLE')")
-    public DataResponse<RoleDtoOut> getRoleById(@PathVariable Long roleId) {
-        return this.roleService.getRoleById(roleId);
+    public DataResponse<RoleDtoOut> findRole(@PathVariable Long roleId) {
+        return this.roleService.findRole(roleId);
     }
 
     @PostMapping
@@ -37,7 +37,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('VIEW_ROLES')")
     public PageableResult<RoleDtoOut> getAllRole(@RequestParam(required = false, defaultValue = "1") int page,
                                                  @RequestParam(required = false, defaultValue = "10") int size) {
-        return this.roleService.getAllRole(page, size);
+        return this.roleService.fetchRoles(page, size);
     }
 
     @DeleteMapping(path = "/{roleId}")

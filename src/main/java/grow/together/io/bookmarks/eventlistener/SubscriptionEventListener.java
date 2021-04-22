@@ -1,6 +1,7 @@
 package grow.together.io.bookmarks.eventlistener;
 
 import grow.together.io.bookmarks.domain.SubscriberStatus;
+import grow.together.io.bookmarks.eventlistener.event.SubscriptionEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;

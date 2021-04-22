@@ -32,16 +32,15 @@ public class TaskSheudeler {
         this.userRepository = userRepository;
     }
 
-
-    public void scheduleTaskWithCronExpression() {
-        log.info("ok it is working");
-    }
-
     @Scheduled(cron = "${cron-jop}")
     public void unlockUser() {
-        this.userRepository.getLockUser(maxFailedAttempt, onLockTime).stream()
-                .map(this.loginAttempsService::unlockWhenTimeExpired)
-                .collect(Collectors.toList());
+        List<User> userList = this.userRepository.getLockUser(maxFailedAttempt, onLockTime);
+        if (!userList.isEmpty()) {
+            userList.stream()
+                    .map(this.loginAttempsService::unlockWhenTimeExpired)
+                    .collect(Collectors.toList());
+        }
+
     }
 }
 

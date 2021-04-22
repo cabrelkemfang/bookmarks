@@ -46,10 +46,10 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         "/oauth/token",
-                        "/api/bookmarks/v1/oauth/sign-up",
-                        "/api/bookmarks/v1/oauth/reset-password",
-                        "/api/bookmarks/v1/oauth/change-password",
-                        "/api/bookmarks/v1/post/**"
+                        "/api/oauth/sign-up",
+                        "/api/oauth/reset-password",
+                        "/api/oauth/change-password",
+                        "/api/bookmarks/**"
                 ).permitAll()
                 .anyRequest().authenticated();
 //                .and().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler);
@@ -64,10 +64,10 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/configuration/security/**",
                 "/swagger-ui.html",
                 "/webjars/**",
-                "/api/bookmarks/v1/oauth/sign-up",
-                "/api/bookmarks/v1/oauth/reset-password",
-                "/api/bookmarks/v1/oauth/change-password",
-                "/api/bookmarks/v1/post/**"
+                "/api/oauth/sign-up",
+                "/api/oauth/reset-password",
+                "/api/oauth/change-password",
+                "/api/bookmarks/**"
                 );
     }
 

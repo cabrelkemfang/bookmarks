@@ -1,12 +1,13 @@
-package grow.together.io.bookmarks.validator.annotation;
+package grow.together.io.bookmarks.validation.constraints;
 
 import grow.together.io.bookmarks.dtomodel.ResetPasswordDto;
 import grow.together.io.bookmarks.dtomodel.UserDtaoIn;
+import grow.together.io.bookmarks.validation.ConfirmedPassword;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class PasswordConfirmValidator implements ConstraintValidator<PasswordConfirmed, Object> {
+public class PasswordConfirmValidator implements ConstraintValidator<ConfirmedPassword, Object> {
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
 

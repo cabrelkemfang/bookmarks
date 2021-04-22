@@ -23,7 +23,7 @@ public interface BookmarkRepository extends JpaRepository<Bookmarks, Long> {
     long categoryCount(@Param("id") Long id);
 
     @Query("select p from Bookmarks p where p.status='PUBLIC'  order by p.createdAt ")
-    Page<Bookmarks> findBookmarks(Pageable pageable);
+    Page<Bookmarks> findPublicBookmarks(Pageable pageable);
 
     @Query("select p from Bookmarks p where p.status='PUBLIC' and p.metaData.title like %:title% or p.categories.name like %:title%")
     Page<Bookmarks> searchBookmarks(Pageable pageable, @Param("title") String title);

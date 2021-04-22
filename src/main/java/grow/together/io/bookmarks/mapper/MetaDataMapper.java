@@ -5,9 +5,10 @@ import grow.together.io.bookmarks.dtomodel.MetaDataDto;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MetaDataMapper {
+public final class MetaDataMapper {
 
-    public MetaData map(MetaDataDto metaDataDto) {
+
+    public static MetaData map(final MetaDataDto metaDataDto) {
         MetaData metaData = new MetaData();
         metaData.setTitle(metaDataDto.getTitle());
         metaData.setUrl(metaDataDto.getUrl());

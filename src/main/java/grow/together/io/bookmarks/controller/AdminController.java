@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/bookmarks/v1/admin")
+@RequestMapping("/api/admin")
 @Slf4j
 public class AdminController {
 
@@ -36,15 +36,15 @@ public class AdminController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/users")
     @PreAuthorize("hasAuthority('VIEW_USERS')")
-    public PageableResult<UserDtaoOut> getAllUser(@RequestParam(required = false, defaultValue = "1") int page,
-                                                  @RequestParam(required = false, defaultValue = "10") int size) {
-        return this.userService.getAllUser(page, size);
+    public PageableResult<UserDtoOut> fetchUsers(@RequestParam(required = false, defaultValue = "1") int page,
+                                                 @RequestParam(required = false, defaultValue = "12") int size) {
+        return this.userService.fetchUsers(page, size);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/user/{userId}")
     @PreAuthorize("hasAuthority('VIEW_USER')")
-    public DataResponse<UserDtaoOut> getUserById(@PathVariable long userId) {
-        return this.userService.getUserById(userId);
+    public DataResponse<UserDtoOut> findUser(@PathVariable long userId) {
+        return this.userService.findUser(userId);
     }
 
     @PutMapping(path = "/user/{email}/status/{status}")
@@ -59,18 +59,18 @@ public class AdminController {
         return this.reportService.getSummaryReport();
     }
 
-    @GetMapping(path = "/post")
+    @GetMapping(path = "/bookmarks")
     @PreAuthorize("hasAuthority('ADMIN_VIEW_POST')")
-    public PageableResult<BookmarkDtoOut> getAllPostByAdmin(@RequestParam(required = false, defaultValue = "1") int page,
-                                                            @RequestParam(required = false, defaultValue = "10") int size) {
-        return this.bookmarksService.getAllBookmarkByAdmin(page, size);
+    public PageableResult<BookmarkDtoOut> fetchBookmarks(@RequestParam(required = false, defaultValue = "1") int page,
+                                                            @RequestParam(required = false, defaultValue = "12") int size) {
+        return this.bookmarksService.fetchBookmarks(page, size);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/post/search")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/bookmarks/search")
     @PreAuthorize("hasAuthority('SEARCH_POST')")
     public PageableResult<BookmarkDtoOut> searchBookmark(@RequestParam String searchBy,
                                                          @RequestParam(required = false, defaultValue = "1") int page,
-                                                         @RequestParam(required = false, defaultValue = "9") int size) {
+                                                         @RequestParam(required = false, defaultValue = "12") int size) {
         return this.bookmarksService.searchBookmarkByAdmin(page, size, searchBy);
     }
 }
