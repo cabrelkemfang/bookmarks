@@ -76,3 +76,13 @@ bookmarks:
 
 cron-jop: 0 0/1 * 1/1 * ?
 
+sentry:
+  dsn: https://1fe7b423d5674c2091ca8e660eef5b0f@o578510.ingest.sentry.io/5734773
+  send-default-pii: true
+  logging:
+    minimum-breadcrumb-level: debug
+    minimum-event-level: warn
+  enable-tracing: true
+  traces-sample-rate: 0.2
+  in-app-includes: grow.together.io.bookmarks
+

@@ -36,7 +36,7 @@ public class UserController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/bookmarks")
     @PreAuthorize("hasAuthority('VIEW_USER_POST')")
     public PageableResult<BookmarkDtoOut> fetchUserBookmarks(@RequestParam(required = false, defaultValue = "1") int page,
-                                                              @RequestParam(required = false, defaultValue = "9") int size) {
+                                                              @RequestParam(required = false, defaultValue = "12") int size) {
         return this.bookmarksService.fetchUserBookmarks(page, size);
     }
 

@@ -58,13 +58,13 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({
-            SocketTimeoutException.class,
-            ClientAbortException.class,
+//            SocketTimeoutException.class,
+//            ClientAbortException.class,
             MessagingException.class,
             IndexOutOfBoundsException.class,
             EOFException.class,
             MailSendException.class,
-            IOException.class,
+//            IOException.class,
             MailConnectException.class
     })
     public ResponseEntity<ErrorValidatorDetail> socketTimeoutRequestException(Exception e) {

@@ -67,7 +67,8 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/api/oauth/sign-up",
                 "/api/oauth/reset-password",
                 "/api/oauth/change-password",
-                "/api/bookmarks/**"
+                "/api/bookmarks/**",
+                "/api/admin/category"
                 );
     }
 

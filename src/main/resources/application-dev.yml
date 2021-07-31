@@ -22,6 +22,8 @@ spring:
   mail:
     username: ghislainck7@gmail.com
     password: itijbkrnacnwrndf
+  zipkin:
+    base-url: http://localhost:9411/
 
 bookmarks:
   admin-email: ghislainck7@gmail.com
@@ -30,3 +32,4 @@ bookmarks:
 
 server:
   port: 7075
+

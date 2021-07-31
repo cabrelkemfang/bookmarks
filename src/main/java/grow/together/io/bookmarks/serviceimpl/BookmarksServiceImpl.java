@@ -14,6 +14,7 @@ import grow.together.io.bookmarks.repository.BookmarkRepository;
 import grow.together.io.bookmarks.service.MetaDataService;
 import grow.together.io.bookmarks.service.BookmarksService;
 import grow.together.io.bookmarks.repository.UserRepository;
+import io.sentry.Sentry;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,10 +120,15 @@ public class BookmarksServiceImpl implements BookmarksService {
     @Override
     @Transactional
     public DataResponse<Void> createBookmark(BookmarkDtoIn bookmarkDtoIn) throws IOException {
+        try {
+            this.bookmarkRepository.save(map(bookmarkDtoIn));
+            return new DataResponse<>("Bookmarks Created Successfully ", HttpStatus.CREATED.value());
 
-        this.bookmarkRepository.save(map(bookmarkDtoIn));
+        } catch (Exception e) {
+            Sentry.captureException(e);
+            throw  new ResourceNotFoundException(e.getMessage());
+        }
 
-        return new DataResponse<>("Bookmarks Created Successfully ", HttpStatus.CREATED.value());
     }
 
     @Override
@@ -150,11 +156,20 @@ public class BookmarksServiceImpl implements BookmarksService {
 
     @Override
     public DataResponse<BookmarkDtoOut> getBookmarkByUserIdAndBookmarkId(Long bookmarkId) {
-        User user = getUser(this.getLoginUser.userName());
-        Bookmarks bookmark = this.bookmarkRepository.findByBookmarksIdAndUserId(bookmarkId, user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("No result Found For Bookmark Id :" + bookmarkId + " And User Id " + user.getId()));
 
-        return new DataResponse<>("Bookmarks Load Successfully", HttpStatus.OK.value(), BookmarkMapper.map(bookmark));
+        Bookmarks bookmark;
+        try {
+            User user = getUser(this.getLoginUser.userName());
+            bookmark = this.bookmarkRepository.findByBookmarksIdAndUserId(bookmarkId, user.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("No result Found For Bookmark Id :" + bookmarkId + " And User Id " + user.getId()));
+
+            return new DataResponse<>("Bookmarks Load Successfully", HttpStatus.OK.value(), BookmarkMapper.map(bookmark));
+
+        } catch (Exception e) {
+            Sentry.captureException(e);
+            throw new ResourceNotFoundException("No result Found For Bookmark Id :");
+        }
+
     }
 
     @Override

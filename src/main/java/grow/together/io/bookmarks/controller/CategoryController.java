@@ -32,7 +32,7 @@ public class CategoryController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retrieve All  Category")
-    @PreAuthorize("hasAuthority('VIEW_CATEGORIES')")
+//    @PreAuthorize("hasAuthority('VIEW_CATEGORIES')")
     public PageableResult<Category> fetchCategory(@RequestParam(defaultValue = "1", required = false) int page,
                                                    @RequestParam(defaultValue = "30", required = false) int size) {
         return this.categoryService.findAll(page, size);
@@ -70,7 +70,7 @@ public class CategoryController {
     @PreAuthorize("hasAuthority('SEARCH_CATEGORY')")
     public PageableResult<Category> searchCategory(@RequestParam String searchBy,
                                                    @RequestParam(required = false, defaultValue = "1") int page,
-                                                   @RequestParam(required = false, defaultValue = "9") int size) {
+                                                   @RequestParam(required = false, defaultValue = "12") int size) {
         return this.categoryService.searchCategory(page, size, searchBy);
     }
 }
